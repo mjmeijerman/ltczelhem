@@ -1,0 +1,10 @@
+---
+
+# APP
+
+project_root: "/home/deploy/ltczelhem.markmeijerman.nl"
+application_env: "prod"
+application_url: "https://ltczelhem.markmeijerman.nl"
+
+project_environment:
+  SYMFONY_ENV: "{{ application_env }}"

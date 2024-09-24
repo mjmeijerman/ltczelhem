@@ -1,0 +1,57 @@
+---
+
+deploy_user: deploy
+nginx_user: www-data
+
+project_root: ~
+project_git_repo: "git@github.com:mjmeijerman/ltczelhem.git"
+project_deploy_strategy: git
+
+# APP
+
+project_shared_children:
+  - path: "/var/sessions"
+    src: "sessions"
+
+web_writable_folders:
+  - { name: "{{ deploy_helper.new_release_path }}/var/cache", recursive: false }
+  - { name: "{{ deploy_helper.new_release_path }}/var/log", recursive: false }
+  - { name: "{{ deploy_helper.shared_path }}/sessions", recursive: false }
+
+project_templates:
+  - name: Copy env file
+    src: "{{ playbook_dir }}/templates/.env.j2"
+    dest: ".env"
+#  - name: Copy parameters file
+#    src:  "templates/parameters.yaml.j2"
+#    dest: "config/packages/parameters.yaml"
+
+project_deploy_hook_on_finalize: "{{ playbook_dir }}/hooks/perform-build.yml"
+
+project_unwanted_items:
+  - .git
+  - .phpspec
+  - ansible
+  - docker
+  - docs
+  - spec
+  - tests
+  - .env.dist
+  - .gitignore
+  - composer.outdated
+  - docker-compose.yml
+  - phpcs.xml
+  - phpspec.yml.dist
+  - phpstan.neon
+  - phpunit.xml.dist
+
+project_composer_binary: composer
+project_has_npm: no
+project_copy_previous_npm_modules: no
+
+default_email_sender: 'no-reply@markmeijerman.nl'
+
+project_clean: true
+project_keep_releases: 1
+
+php_application_command: '/usr/bin/php -q {{ project_root }}/current'

@@ -1,0 +1,23 @@
+name: Deploy to production
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+on:
+  push:
+    tags:
+      - v*
+
+jobs:
+  deploy-ltczelhem-production:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - name: Deploy LTC Zelhem production
+        uses: ./.github/actions/ansible
+        env:
+          VAULT_PASS: ${{ secrets.VAULT_PASS }}
+        with:
+          extraVars: "--limit=webserver_production --extra project_version=${{ github.ref }}"
+          verbosity: ""

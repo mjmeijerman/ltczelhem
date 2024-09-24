@@ -1,0 +1,6 @@
+---
+
+- name: "Do not send any email to the deploy user by cron"
+  cronvar:
+    name: MAILTO
+    value: '""'

@@ -1,0 +1,254 @@
+name: Pull request
+
+on: pull_request
+
+jobs:
+  phpstan-analyse:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php-versions: ['8.2']
+
+    steps:
+      - uses: actions/checkout@v4.1.7
+
+      # Only enable PHP extensions that are enabled on production. Still more than we need probably, but at least dependabot won't install symfony/redis-messenger this way
+      - name: Setup PHP with tools # https://github.com/shivammathur/setup-php
+        uses: shivammathur/setup-php@2.31.1
+        with:
+          php-version: ${{ matrix.php-versions }}
+          tools: composer:v2
+          ini-values: memory_limit=1536M, post_max_size=16M, date.timezone="Europe/Amsterdam"
+          extensions: none, amqp, bcmath, Core, ctype, curl, date, dom, exif, fileinfo, filter, ftp, gd, hash, iconv, intl, json, libxml, mbstring, memcached, mysqlnd, openssl, pcre, PDO, pdo_mysql, Phar, posix, readline, Reflection, session, SimpleXML, sockets, sodium, SPL, standard, tokenizer, xml, xmlreader, xmlwriter, zip, zlib
+
+#      - name: Copy symfony config file
+#        run: cp config/packages/parameters.yaml.dist config/packages/parameters.yaml
+
+      # Prepare all the caches
+      - name: Composer Cache
+        id: composer-cache
+        run: |
+          echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+      - uses: actions/cache@v4.0.2
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ matrix.php-versions }}-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-${{ matrix.php-versions }}
+
+      - name: PHPStan Cache
+        uses: actions/cache@v4.0.2
+        with:
+          path: var/cache/resultCache.php
+          key: ${{ runner.OS }}-phpstan-${{ matrix.php-versions }}
+
+      # Build requirements for running the static analysis & unit tests
+      - run: composer install
+
+      # Run static analysis
+      - run: vendor/bin/phpstan analyse
+
+  test-unit:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php-versions: ['8.2']
+    steps:
+      - uses: actions/checkout@v4.1.7
+
+      # Only enable PHP extensions that are enabled on production. Still more than we need probably, but at least dependabot won't install symfony/redis-messenger this way
+      - name: Setup PHP with tools # https://github.com/shivammathur/setup-php
+        uses: shivammathur/setup-php@2.31.1
+        with:
+          php-version: ${{ matrix.php-versions }}
+          tools: composer:v2
+          ini-values: memory_limit=1536M, post_max_size=16M, date.timezone="Europe/Amsterdam"
+          extensions: none, amqp, bcmath, Core, ctype, curl, date, dom, exif, fileinfo, filter, ftp, gd, hash, iconv, intl, json, libxml, mbstring, memcached, mysqlnd, openssl, pcre, PDO, pdo_mysql, Phar, posix, readline, Reflection, session, SimpleXML, sockets, sodium, SPL, standard, tokenizer, xml, xmlreader, xmlwriter, zip, zlib
+
+#      - name: Copy symfony config file
+#        run: cp config/packages/parameters.yaml.dist config/packages/parameters.yaml
+
+      # Prepare all the caches
+      - name: Composer Cache
+        id: composer-cache
+        run: |
+          echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+      - uses: actions/cache@v4.0.2
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ matrix.php-versions }}-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-${{ matrix.php-versions }}
+
+      # Build requirements for running the static analysis & unit tests
+      - run: composer install
+      - name: Run unit tests
+        run: vendor/bin/phpunit --configuration unit.xml
+
+  test-integration:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php-versions: ['8.2']
+    services:
+      mariadb:
+        image: mariadb:10.6 # https://hub.docker.com/_/mariadb
+        env:
+          MYSQL_ALLOW_EMPTY_PASSWORD: yes
+          MYSQL_DATABASE: ltc_zelhem_test
+          MYSQL_USER: ltc_zelhem_test
+          MYSQL_PASSWORD: ltc_zelhem_test
+        ports:
+          - 3306:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+
+    steps:
+      - uses: actions/checkout@v4.1.7
+
+      # Only enable PHP extensions that are enabled on production. Still more than we need probably, but at least dependabot won't install symfony/redis-messenger this way
+      - name: Setup PHP with tools # https://github.com/shivammathur/setup-php
+        uses: shivammathur/setup-php@2.31.1
+        with:
+          php-version: ${{ matrix.php-versions }}
+          tools: composer:v2
+          ini-values: memory_limit=1536M, post_max_size=16M, date.timezone="Europe/Amsterdam"
+          extensions: none, amqp, bcmath, Core, ctype, curl, date, dom, exif, fileinfo, filter, ftp, gd, hash, iconv, intl, json, libxml, mbstring, memcached, mysqlnd, openssl, pcre, PDO, pdo_mysql, Phar, posix, readline, Reflection, session, SimpleXML, sockets, sodium, SPL, standard, tokenizer, xml, xmlreader, xmlwriter, zip, zlib
+
+#      - name: Copy symfony config file
+#        run: cp config/packages/parameters.yaml.dist config/packages/parameters.yaml
+      - name: Copy symfony env file
+        run: cp .env.ci-test .env.test
+
+      # Prepare all the caches
+      - name: Composer Cache
+        id: composer-cache
+        run: |
+          echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+      - uses: actions/cache@v4.0.2
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ matrix.php-versions }}-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-${{ matrix.php-versions }}
+
+      # Build requirements for running the static analysis & unit tests
+      - run: composer install
+      - name: run migrations
+        run: bin/console doctrine:migrations:migrate --no-interaction --allow-no-migration --env=test
+      - name: Run database integration tests
+        run: vendor/bin/phpunit --configuration database-integration.xml
+
+#  test-functional:
+#    strategy:
+#      matrix:
+#        php-versions: ['8.2']
+#    services:
+#      mariadb:
+#        image: mariadb:10.6 # https://hub.docker.com/_/mariadb
+#        env:
+#          MYSQL_ALLOW_EMPTY_PASSWORD: yes
+#          MYSQL_DATABASE: jurysysteem_test
+#          MYSQL_USER: jurysysteem_test
+#          MYSQL_PASSWORD: jurysysteem_test
+#        ports:
+#          - 3306:3306
+#        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+#    runs-on: ubuntu-latest
+#    steps:
+#      - uses: actions/checkout@v4.1.7
+#
+#      # Only enable PHP extensions that are enabled on production. Still more than we need probably, but at least dependabot won't install symfony/redis-messenger this way
+#      - name: Setup PHP with tools # https://github.com/shivammathur/setup-php
+#        uses: shivammathur/setup-php@2.31.1
+#        with:
+#          php-version: ${{ matrix.php-versions }}
+#          tools: composer:v2
+#          ini-values: memory_limit=1536M, post_max_size=16M, date.timezone="Europe/Amsterdam"
+#          extensions: none, amqp, bcmath, Core, ctype, curl, date, dom, exif, fileinfo, filter, ftp, gd, hash, iconv, intl, json, libxml, mbstring, memcached, mysqlnd, openssl, pcre, PDO, pdo_mysql, Phar, posix, readline, Reflection, session, SimpleXML, sockets, sodium, SPL, standard, tokenizer, xml, xmlreader, xmlwriter, zip, zlib
+#
+#      - name: Copy symfony config file
+#        run: cp config/packages/parameters.yaml.dist config/packages/parameters.yaml
+#
+#      # Prepare all the caches
+#      - name: Composer Cache
+#        id: composer-cache
+#        run: |
+#          echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+#      - uses: actions/cache@v4.0.2
+#        with:
+#          path: ${{ steps.composer-cache.outputs.dir }}
+#          key: ${{ runner.os }}-composer-${{ matrix.php-versions }}-${{ hashFiles('**/composer.lock') }}
+#          restore-keys: |
+#            ${{ runner.os }}-composer-${{ matrix.php-versions }}
+#
+#      # Build requirements for running the static analysis & unit tests
+#      - run: composer install
+#      - name: run migrations
+#        run: bin/console doctrine:migrations:migrate --no-interaction --allow-no-migration --env=test
+#      - name: Run functional tests
+#        run: vendor/bin/codecept run functional
+
+  linting:
+    timeout-minutes: 10
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php-versions: [ '8.2' ]
+    steps:
+      - uses: actions/checkout@v4.1.7
+
+      # Only enable PHP extensions that are enabled on production. Still more than we need probably, but at least dependabot won't install symfony/redis-messenger this way
+      - name: Setup PHP with tools # https://github.com/shivammathur/setup-php
+        uses: shivammathur/setup-php@2.31.1
+        with:
+          php-version: ${{ matrix.php-versions }}
+          tools: composer:v2
+          ini-values: memory_limit=1536M, post_max_size=16M, date.timezone="Europe/Amsterdam"
+          extensions: none, amqp, bcmath, Core, ctype, curl, date, dom, exif, fileinfo, filter, ftp, gd, hash, iconv, intl, json, libxml, mbstring, memcached, mysqlnd, openssl, pcre, PDO, pdo_mysql, Phar, posix, readline, Reflection, session, SimpleXML, sockets, sodium, SPL, standard, tokenizer, xml, xmlreader, xmlwriter, zip, zlib
+
+#      - name: Copy symfony config file
+#        run: cp config/packages/parameters.yaml.dist config/packages/parameters.yaml
+
+      # Prepare all the caches
+      - name: Composer Cache
+        id: composer-cache
+        run: |
+          echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+      - uses: actions/cache@v4.0.2
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ matrix.php-versions }}-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-${{ matrix.php-versions }}
+
+      # Build requirements for running the static analysis & unit tests
+      - run: composer install
+
+      - name: Run composer validator
+        run: composer validate --strict
+
+      - name: Run yaml linter
+        run: bin/console lint:yaml config src --parse-tags
+
+      - name: Run container linter
+        run: php bin/console lint:container
+
+  dependabot:
+    permissions:
+      pull-requests: write
+      contents: write
+    needs: [phpstan-analyse, test-unit, test-integration, linting]
+    runs-on: ubuntu-latest
+    if: ${{ github.actor == 'dependabot[bot]' }}
+    steps:
+      - name: Dependabot metadata
+        id: metadata
+        uses: dependabot/fetch-metadata@v2.2.0
+        with:
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+      - name: Enable auto-merge for Dependabot PRs
+        if: ${{steps.metadata.outputs.update-type == 'version-update:semver-minor' || steps.metadata.outputs.update-type == 'version-update:semver-patch'}}
+        run: gh pr merge --auto --merge "$PR_URL"
+        env:
+          PR_URL: ${{github.event.pull_request.html_url}}
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}

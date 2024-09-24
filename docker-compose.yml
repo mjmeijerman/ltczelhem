@@ -1,0 +1,76 @@
+version: '3.5'
+services:
+  ltc-zelhem-database:
+    build: docker/mariadb
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: ltc_zelhem
+      MYSQL_USER: ltc_zelhem
+      MYSQL_PASSWORD: ltc_zelhem
+    volumes:
+#      - database-ltc-zelhem:/var/lib/mysql
+      - ./data:/docker-entrypoint-initdb.d
+    ports:
+      - "8195:3306"
+
+  ltc-zelhem-webserver:
+    build: docker/nginx
+    depends_on:
+      - php-fpm
+    volumes:
+      - ./:/opt/project
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=traefik-ltc-zelhem"
+      - "traefik.http.routers.ltc-zelhem.rule=Host(`ltc-zelhem.localhost`)"
+      - "traefik.http.routers.ltc-zelhem.entrypoints=web"
+    networks:
+      - traefik-ltc-zelhem
+      - default
+    ports:
+      - "8011:80"
+
+  php-cli:
+    build: docker/php-cli
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    environment:
+      COMPOSER_HOME: "/opt/project/var/cache/.composer"
+      PHP_IDE_CONFIG: "serverName=localhost"
+      PHP_CS_FIXER_IGNORE_ENV: 1
+    depends_on:
+      - "ltc-zelhem-database"
+    volumes:
+      - ./:/opt/project
+      - ~/.ssh/id_rsa:/root/.ssh/id_rsa
+      - ~/.ssh/known_hosts:/root/.ssh/known_hosts
+
+  php-fpm:
+    build: docker/php-fpm
+    environment:
+      COMPOSER_HOME: "/opt/project/var/cache/.composer"
+      PHP_IDE_CONFIG: "serverName=localhost"
+    depends_on:
+      - "ltc-zelhem-database"
+    volumes:
+      - ./:/opt/project
+
+  ltc-zelhem-mailhog:
+    build: docker/mailhog
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=traefik-ltc-zelhem"
+      - "traefik.http.routers.ltc-zelhem-mailhog.rule=Host(`mailhog.ltc-zelhem.localhost`)"
+      - "traefik.http.routers.ltc-zelhem-mailhog.entrypoints=web"
+      - "traefik.http.services.ltc-zelhem-mailhog.loadbalancer.server.port=8025"
+    networks:
+      - traefik-ltc-zelhem
+      - default
+
+volumes:
+  database-ltc-zelhem:
+
+networks:
+  traefik-ltc-zelhem:
+    external: true
+    name: traefik-ltc-zelhem
