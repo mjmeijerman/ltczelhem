@@ -1,8 +1,16 @@
 name: 'Ansible'
 description: 'Runs an Ansible playbook'
+inputs:
+  limit:
+    description: 'The environment to deploy to (limit hosts to a specific group)'
+    required: true
+  version:
+    description: 'The version/tag to deploy'
+    required: true
+  verbosity:
+    description: 'Verbosity for ansible output, set to -vvv for debugging'
+    required: false
+    default: ''
 runs:
   using: 'docker'
   image: 'Dockerfile'
-  args:
-    - ${{ inputs.extraVars }}
-    - ${{ inputs.verbosity }}
