@@ -8,7 +8,7 @@
         "ext-ctype": "*",
         "ext-iconv": "*",
         "ext-pdo": "*",
-        "doctrine/dbal": "^3",
+        "doctrine/dbal": "^4",
         "doctrine/doctrine-migrations-bundle": "^3.3",
         "phpoffice/phpspreadsheet": "^2.0.0",
         "ramsey/uuid": "^4.2.3",
