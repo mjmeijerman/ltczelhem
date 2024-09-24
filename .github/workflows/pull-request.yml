@@ -22,7 +22,7 @@ jobs:
           extensions: none, amqp, bcmath, Core, ctype, curl, date, dom, exif, fileinfo, filter, ftp, gd, hash, iconv, intl, json, libxml, mbstring, memcached, mysqlnd, openssl, pcre, PDO, pdo_mysql, Phar, posix, readline, Reflection, session, SimpleXML, sockets, sodium, SPL, standard, tokenizer, xml, xmlreader, xmlwriter, zip, zlib
 
       - name: Copy symfony env file
-        run: cp .env.ci-test .env.test
+        run: cp .env.ci-test .env
 #      - name: Copy symfony config file
 #        run: cp config/packages/parameters.yaml.dist config/packages/parameters.yaml
 
@@ -208,6 +208,8 @@ jobs:
           ini-values: memory_limit=1536M, post_max_size=16M, date.timezone="Europe/Amsterdam"
           extensions: none, amqp, bcmath, Core, ctype, curl, date, dom, exif, fileinfo, filter, ftp, gd, hash, iconv, intl, json, libxml, mbstring, memcached, mysqlnd, openssl, pcre, PDO, pdo_mysql, Phar, posix, readline, Reflection, session, SimpleXML, sockets, sodium, SPL, standard, tokenizer, xml, xmlreader, xmlwriter, zip, zlib
 
+      - name: Copy symfony env file
+        run: cp .env.ci-test .env
 #      - name: Copy symfony config file
 #        run: cp config/packages/parameters.yaml.dist config/packages/parameters.yaml
 
