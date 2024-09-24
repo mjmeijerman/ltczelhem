@@ -1,4 +1,6 @@
 {
+    "name": "mjmeijerman/ltczelhem",
+    "description": "LTC Zelhem",
     "type": "project",
     "license": "proprietary",
     "minimum-stability": "stable",
