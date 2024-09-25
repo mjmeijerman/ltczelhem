@@ -19,5 +19,6 @@ jobs:
         env:
           VAULT_PASS: ${{ secrets.VAULT_PASS }}
         with:
-          extraVars: "--limit=webserver_production --extra project_version=${{ github.ref }}"
-          verbosity: ""
+          limit: "webserver"
+          version: ${{ github.ref }}
+          verbosity: "-v"
