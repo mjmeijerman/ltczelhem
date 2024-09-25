@@ -1,4 +1,3 @@
-version: '3.5'
 services:
   ltc-zelhem-database:
     build: docker/mariadb
