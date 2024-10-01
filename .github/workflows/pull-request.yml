@@ -10,7 +10,7 @@ jobs:
         php-versions: ['8.2']
 
     steps:
-      - uses: actions/checkout@v4.1.7
+      - uses: actions/checkout@v4.2.0
 
       # Only enable PHP extensions that are enabled on production. Still more than we need probably, but at least dependabot won't install symfony/redis-messenger this way
       - name: Setup PHP with tools # https://github.com/shivammathur/setup-php
@@ -56,7 +56,7 @@ jobs:
 #      matrix:
 #        php-versions: ['8.2']
 #    steps:
-#      - uses: actions/checkout@v4.1.7
+#      - uses: actions/checkout@v4.2.0
 #
 #      # Only enable PHP extensions that are enabled on production. Still more than we need probably, but at least dependabot won't install symfony/redis-messenger this way
 #      - name: Setup PHP with tools # https://github.com/shivammathur/setup-php
@@ -105,7 +105,7 @@ jobs:
 #        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
 #
 #    steps:
-#      - uses: actions/checkout@v4.1.7
+#      - uses: actions/checkout@v4.2.0
 #
 #      # Only enable PHP extensions that are enabled on production. Still more than we need probably, but at least dependabot won't install symfony/redis-messenger this way
 #      - name: Setup PHP with tools # https://github.com/shivammathur/setup-php
@@ -157,7 +157,7 @@ jobs:
 #        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
 #    runs-on: ubuntu-latest
 #    steps:
-#      - uses: actions/checkout@v4.1.7
+#      - uses: actions/checkout@v4.2.0
 #
 #      # Only enable PHP extensions that are enabled on production. Still more than we need probably, but at least dependabot won't install symfony/redis-messenger this way
 #      - name: Setup PHP with tools # https://github.com/shivammathur/setup-php
@@ -197,7 +197,7 @@ jobs:
       matrix:
         php-versions: [ '8.2' ]
     steps:
-      - uses: actions/checkout@v4.1.7
+      - uses: actions/checkout@v4.2.0
 
       # Only enable PHP extensions that are enabled on production. Still more than we need probably, but at least dependabot won't install symfony/redis-messenger this way
       - name: Setup PHP with tools # https://github.com/shivammathur/setup-php
