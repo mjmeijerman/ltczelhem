@@ -28,6 +28,12 @@ project_templates:
 
 project_deploy_hook_on_finalize: "{{ playbook_dir }}/hooks/perform-build.yml"
 
+project_has_npm: yes
+project_needs_npm_build: yes
+project_copy_previous_npm_modules: yes
+project_npm_binary: /usr/bin/npm
+project_command_for_npm_install: "{{ project_npm_binary }} install"
+
 project_unwanted_items:
   - .git
   - .phpspec
@@ -46,8 +52,6 @@ project_unwanted_items:
   - phpunit.xml.dist
 
 project_composer_binary: composer
-project_has_npm: no
-project_copy_previous_npm_modules: no
 
 default_email_sender: 'no-reply@markmeijerman.nl'
 
