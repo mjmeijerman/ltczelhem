@@ -14,7 +14,6 @@ final class SomeController extends AbstractController
     #[Route('/')]
     public function number(): Response
     {
-        throw new LogicException('Testing the logger');
         return $this->render('base.html.twig');
     }
 }
