@@ -54,8 +54,8 @@ services:
     volumes:
       - ./:/opt/project
 
-  ltc-zelhem-mailhog:
-    build: docker/mailhog
+  mailer:
+    image: axllent/mailpit
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=traefik-ltc-zelhem"
@@ -65,6 +65,13 @@ services:
     networks:
       - traefik-ltc-zelhem
       - default
+
+  node:
+    image: node:alpine
+    working_dir: /opt/project
+    volumes:
+      - ./:/opt/project
+    user: ${HOST_UID}:${HOST_GID}
 
 volumes:
   database-ltc-zelhem:

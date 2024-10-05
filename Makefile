@@ -8,6 +8,7 @@ ARGS ?= $(shell read -p "Additional arguments ([enter] for none): " args; echo $
 ## setup: 	Setup the project for the first time
 .PHONY: setup
 setup: config up
+	docker run -it -w=/opt/project --mount src="$(shell pwd)",target=/opt/project,type=bind node:alpine npm install
 	dev/composer install
 	dev/console doctrine:migrations:migrate --no-interaction --allow-no-migration
 
@@ -137,3 +138,7 @@ database-integration:
 .PHONY: cs-fix
 cs-fix:
 	${PHP_RUN} php -d memory_limit=-1 vendor/bin/php-cs-fixer fix --verbose --diff $(ARGS)
+
+.PHONY: node
+node:
+	docker run -it -w=/opt/project --mount src="$(shell pwd)",target=/opt/project,type=bind node:alpine $(ARGS)
