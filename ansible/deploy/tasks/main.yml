@@ -29,4 +29,4 @@
   environment: "{{ project_environment }}"
 
 - name: Restart php-fpm
-  shell: sudo /usr/sbin/service php8.2-fpm restart
+  shell: sudo /usr/sbin/service php8.3-fpm restart

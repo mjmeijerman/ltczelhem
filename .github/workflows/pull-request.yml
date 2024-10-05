@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        php-versions: ['8.2']
+        php-versions: ['8.3']
 
     steps:
       - uses: actions/checkout@v4.2.0
@@ -54,7 +54,7 @@ jobs:
 #    runs-on: ubuntu-latest
 #    strategy:
 #      matrix:
-#        php-versions: ['8.2']
+#        php-versions: ['8.3']
 #    steps:
 #      - uses: actions/checkout@v4.2.0
 #
@@ -91,7 +91,7 @@ jobs:
 #    runs-on: ubuntu-latest
 #    strategy:
 #      matrix:
-#        php-versions: ['8.2']
+#        php-versions: ['8.3']
 #    services:
 #      mariadb:
 #        image: mariadb:10.6 # https://hub.docker.com/_/mariadb
@@ -143,7 +143,7 @@ jobs:
 #  test-functional:
 #    strategy:
 #      matrix:
-#        php-versions: ['8.2']
+#        php-versions: ['8.3']
 #    services:
 #      mariadb:
 #        image: mariadb:10.6 # https://hub.docker.com/_/mariadb
@@ -195,7 +195,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        php-versions: [ '8.2' ]
+        php-versions: [ '8.3' ]
     steps:
       - uses: actions/checkout@v4.2.0
 
