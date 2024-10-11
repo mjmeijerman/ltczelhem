@@ -59,9 +59,9 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=traefik-ltc-zelhem"
-      - "traefik.http.routers.ltc-zelhem-mailhog.rule=Host(`mailhog.ltc-zelhem.localhost`)"
-      - "traefik.http.routers.ltc-zelhem-mailhog.entrypoints=web"
-      - "traefik.http.services.ltc-zelhem-mailhog.loadbalancer.server.port=8025"
+      - "traefik.http.routers.ltc-zelhem-mailer.rule=Host(`mailer.ltc-zelhem.localhost`)"
+      - "traefik.http.routers.ltc-zelhem-mailer.entrypoints=web"
+      - "traefik.http.services.ltc-zelhem-mailer.loadbalancer.server.port=8025"
     networks:
       - traefik-ltc-zelhem
       - default
