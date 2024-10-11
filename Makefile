@@ -143,6 +143,10 @@ cs-fix:
 node:
 	docker run -it -w=/opt/project --mount src="$(shell pwd)",target=/opt/project,type=bind node:alpine $(ARGS)
 
+.PHONY: watch
+watch:
+	dev/node npm run watch
+
 ## update-ansible-roles: Installs ansible roles
 .PHONY: update-ansible-roles
 update-ansible-roles:
