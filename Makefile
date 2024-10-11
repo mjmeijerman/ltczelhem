@@ -142,3 +142,8 @@ cs-fix:
 .PHONY: node
 node:
 	docker run -it -w=/opt/project --mount src="$(shell pwd)",target=/opt/project,type=bind node:alpine $(ARGS)
+
+## update-ansible-roles: Installs ansible roles
+.PHONY: update-ansible-roles
+update-ansible-roles:
+	ansible-galaxy install -f -r ansible/ansible-galaxy.yml

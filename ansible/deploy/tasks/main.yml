@@ -28,5 +28,11 @@
     chdir: "{{ deploy_helper.new_release_path }}"
   environment: "{{ project_environment }}"
 
+- name: asset map
+  command: bin/console importmap:install
+  args:
+    chdir: "{{ deploy_helper.new_release_path }}"
+  environment: "{{ project_environment }}"
+
 - name: Restart php-fpm
   shell: sudo /usr/sbin/service php8.3-fpm restart
