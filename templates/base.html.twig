@@ -5,18 +5,14 @@
     <title>{% block title %}L.T.C. Zelhem{% endblock %}</title>
     <link rel="shortcut icon" href="{{ asset('static_images/favicon.png') }}">
     {% block stylesheets %}
-        {{ encore_entry_link_tags('app') }}
     {% endblock %}
-
-    {% block javascripts %}
-        {{ encore_entry_script_tags('app') }}
-        {% block importmap %}{{ importmap('app') }}{% endblock %}
-    {% endblock %}
+    {{ encore_entry_link_tags('app') }}
 </head>
 <body>
-<div class="flex sticky p-4 top-0 left-0 right-0 shadow w-full bg-gray-50">
+<div class="flex sticky p-4 top-0 left-0 right-0 shadow w-full bg-gray-50 z-20">
     <a href="#" class="flex items-center">
         <img src="{{ asset('static_images/logo-ltc-zelhem.png') }}" width="60px"/>
+        <span class="text-3xl pl-5">Welkom bij LTC Zelhem</span>
     </a>
     <span class="ml-auto flex items-center">
         <a href="#" class="flex items-center">
@@ -24,7 +20,17 @@
         </a>
     </span>
 </div>
-<div class="flex flex-col">
+{# an image over the full page width and 30% of the screen height #}
+{% set images = [
+    asset('static_images/sliderimage1.jpeg'),
+    asset('static_images/sliderimage2.jpeg'),
+    asset('static_images/sliderimage3.jpeg'),
+    asset('static_images/sliderimage4.jpeg')
+] %}
+<div class="relative w-full">
+    <img src="{{ random(images) }}" class="object-cover h-full w-full"/>
+</div>
+<div class="flex flex-col min-h-screen">
     <div class="w-full p-5">
         {% block body %}{% endblock %}
     </div>
