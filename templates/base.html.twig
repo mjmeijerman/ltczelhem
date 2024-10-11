@@ -1,22 +1,33 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
-        {% block stylesheets %}
-            {{ encore_entry_link_tags('app') }}
-        {% endblock %}
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}L.T.C. Zelhem{% endblock %}</title>
+    <link rel="shortcut icon" href="{{ asset('static_images/favicon.png') }}">
+    {% block stylesheets %}
+        {{ encore_entry_link_tags('app') }}
+    {% endblock %}
 
-        {% block javascripts %}
-            {{ encore_entry_script_tags('app') }}
-            {% block importmap %}{{ importmap('app') }}{% endblock %}
-        {% endblock %}
-    </head>
-    <body>
-    <h1 class="text-3xl font-bold underline">
-        Hello world!
-    </h1>
+    {% block javascripts %}
+        {{ encore_entry_script_tags('app') }}
+        {% block importmap %}{{ importmap('app') }}{% endblock %}
+    {% endblock %}
+</head>
+<body>
+<div class="flex sticky p-4 top-0 left-0 right-0 shadow w-full bg-gray-50">
+    <a href="#" class="flex items-center">
+        <img src="{{ asset('static_images/logo-ltc-zelhem.png') }}" width="60px"/>
+    </a>
+    <span class="ml-auto flex items-center">
+        <a href="#" class="flex items-center">
+            <img src="{{ asset('static_images/login.svg') }}" class="mr-2"/> Login
+        </a>
+    </span>
+</div>
+<div class="flex flex-col">
+    <div class="w-full p-5">
         {% block body %}{% endblock %}
-    </body>
+    </div>
+</div>
+</body>
 </html>
