@@ -28,6 +28,7 @@ final class DefaultController extends AbstractController
     #[Route('/change-language/{language}', name: 'changeLanguage')]
     public function changeLanguage(Request $request, TranslatorInterface $translator, string $language, UserCredentialRepository $userCredentialRepository): Response
     {
+        // todo: not working in production, why?
         $referer = $request->headers->get('referer');
         try {
             $locale = Locale::from($language);
