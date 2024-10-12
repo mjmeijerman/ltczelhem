@@ -49,6 +49,38 @@ final class SecurityController extends AbstractController
         ]);
     }
 
+    #[IsGranted('ROLE_USER')]
+    #[Route('/login-redirect/', name: 'redirectToCorrectLoginPage', methods: ['GET'])]
+    public function redirectToCorrectLoginPage(): Response
+    {
+        $user = $this->getUser();
+        if (!$user instanceof UserCredentials) {
+            $this->addFlash('error', 'general.something_went_wrong');
+
+            return $this->redirectToRoute('dashboard');
+        }
+
+        if ($user->roles->count() > 1) {
+            exit('select role');
+            // return $this->redirectToRoute('selectRole');
+        }
+
+        $role = $user->roles->first();
+        switch ($role->value) {
+            case UserRole::ROLE_SUPER_ADMIN->value:
+                exit('superAdminDashboard');
+                // return $this->redirectToRoute('superAdminDashboard');
+            case UserRole::ROLE_ADMIN->value:
+                exit('adminDashboard');
+                // return $this->redirectToRoute('adminDashboard');
+            case UserRole::ROLE_TRAINER->value:
+                exit('trainerDashboard');
+                // return $this->redirectToRoute('trainerDashboard');
+            default:
+                throw new \LogicException('Unknown role');
+        }
+    }
+
     #[Route('/logout', name: 'logout', methods: ['GET'])]
     public function logout(): void
     {
@@ -145,36 +177,6 @@ final class SecurityController extends AbstractController
         $this->addFlash('success', $translator->trans('security.password_set'));
 
         return $this->redirectToRoute('loginRoute');
-    }
-
-    #[IsGranted('ROLE_USER')]
-    #[Route('/login-redirect/', name: 'redirectToCorrectLoginPage', methods: ['GET'])]
-    public function redirectToCorrectLoginPage(): Response
-    {
-        $user = $this->getUser();
-        if (!$user instanceof UserCredentials) {
-            throw new \LogicException('Expected a logged in user, but none was found');
-        }
-
-        if ($user->roles->count() > 1) {
-            die('select role');
-//            return $this->redirectToRoute('selectRole');
-        }
-
-        $role = $user->roles->first();
-        switch ($role->value) {
-            case UserRole::ROLE_SUPER_ADMIN->value:
-                die('superAdminDashboard');
-//                return $this->redirectToRoute('superAdminDashboard');
-            case UserRole::ROLE_ADMIN->value:
-                die('adminDashboard');
-//                return $this->redirectToRoute('adminDashboard');
-            case UserRole::ROLE_TRAINER->value:
-                die('trainerDashboard');
-//                return $this->redirectToRoute('trainerDashboard');
-            default:
-                throw new \LogicException('Unknown role');
-        }
     }
 
     #[Route('/security/getNewCredentials/', name: 'getNewCredentials', methods: ['GET'])]
