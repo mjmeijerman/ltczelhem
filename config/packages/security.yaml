@@ -1,26 +1,41 @@
 security:
-    # https://symfony.com/doc/current/security.html#registering-the-user-hashing-passwords
     password_hashers:
         Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
-    # https://symfony.com/doc/current/security.html#loading-the-user-the-user-provider
+
     providers:
-        users_in_memory: { memory: null }
+        dbal_provider:
+            id: LtcZelhem\App\Infrastructure\DoctrineDbal\DbalUserCredentialRepository
+
+    role_hierarchy:
+        ROLE_SUPER_ADMIN: [ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH, ROLE_USER]
+        ROLE_ADMIN: [ROLE_ALLOWED_TO_SWITCH, ROLE_USER]
+        ROLE_TRAINER: [ROLE_USER]
+
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
+
         main:
+            pattern: ^/
             lazy: true
-            provider: users_in_memory
+            provider: dbal_provider
+            form_login:
+                login_path: loginRoute
+                check_path: loginRoute
+                enable_csrf: true
+                default_target_path: 'redirectToCorrectLoginPage'
+            switch_user: { target_route: 'loginRoute' }
 
-            # activate different ways to authenticate
-            # https://symfony.com/doc/current/security.html#the-firewall
+            logout:
+                path: logout
+                target: /
 
-            # https://symfony.com/doc/current/security/impersonating_user.html
-            # switch_user: true
+            remember_me:
+                secret: "%kernel.secret%"
+                lifetime: 2419200 # 4 weeks in seconds
+                path: /
 
-    # Easy way to control access for large sections of your site
-    # Note: Only the *first* access control that matches will be used
     access_control:
         # - { path: ^/admin, roles: ROLE_ADMIN }
         # - { path: ^/profile, roles: ROLE_USER }

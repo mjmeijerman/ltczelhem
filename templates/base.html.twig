@@ -10,17 +10,49 @@
 </head>
 <body>
 <div class="flex sticky p-4 top-0 left-0 right-0 shadow w-full bg-gray-50 z-20">
-    <a href="#" class="flex items-center">
+    <a href="{{ path('homepage') }}" class="flex items-center">
         <img src="{{ asset('static_images/logo-ltc-zelhem.png') }}" width="60px"/>
-        <span class="text-3xl pl-5">Welkom bij LTC Zelhem</span>
+        <span class="text-3xl pl-5">{% trans %}header_welcome{% endtrans %}</span>
     </a>
-    <span class="ml-auto flex items-center">
-        <a href="#" class="flex items-center">
-            <img src="{{ asset('static_images/login.svg') }}" class="mr-2"/> Login
-        </a>
+    <span class="ml-auto flex items-center space-x-4">
+        <div class="flex items-center space-x-2">
+            <a href="{{ path('changeLanguage', {'language': 'nl'}) }}" class="px-3 py-1 rounded-full border
+                {% if app.request.locale == 'nl' %}
+                    bg-blue-500 text-white
+                {% else %}
+                    bg-gray-200 text-gray-700
+                {% endif %}">
+                NL
+            </a>
+            <a href="{{ path('changeLanguage', {'language': 'en'}) }}" class="px-3 py-1 rounded-full border
+                {% if app.request.locale == 'en' %}
+                    bg-blue-500 text-white
+                {% else %}
+                    bg-gray-200 text-gray-700
+                {% endif %}">
+                EN
+            </a>
+        </div>
+        {% if app.user %}
+            {% if is_granted('IS_IMPERSONATOR') %}
+                <a href="{{ impersonation_exit_path(path('loginRoute') ) }}" class="flex items-center">
+                    <img src="{{ asset('static_images/login.svg') }}"
+                         class="mr-2"/> {% trans %}security.logout{% endtrans %}
+                </a>
+            {% else %}
+                <a href="{{ path('logout') }}" class="flex items-center">
+                    <img src="{{ asset('static_images/login.svg') }}"
+                         class="mr-2"/> {% trans %}security.logout{% endtrans %}
+                </a>
+            {% endif %}
+        {% else %}
+            <a href="{{ path('loginRoute') }}" class="flex items-center">
+                <img src="{{ asset('static_images/login.svg') }}" class="mr-2"/> <span class="pr-4">{% trans %}security.login{% endtrans %}</span>
+            </a>
+
+        {% endif %}
     </span>
 </div>
-{# an image over the full page width and 30% of the screen height #}
 {% set images = [
     asset('static_images/sliderimage1.jpeg'),
     asset('static_images/sliderimage2.jpeg'),
@@ -30,10 +62,44 @@
 <div class="relative w-full">
     <img src="{{ random(images) }}" class="object-cover h-full w-full"/>
 </div>
+{% for type, messages in app.flashes %}
+    {% for message in messages %}
+        <div class="flash-message p-4 mb-4 text-sm rounded-lg flex items-center justify-between
+    {% if type == 'success' %}
+        bg-green-100 text-green-700
+    {% elseif type == 'error' %}
+        bg-red-100 text-red-700
+    {% elseif type == 'warning' %}
+        bg-yellow-100 text-yellow-700
+    {% else %}
+        bg-blue-100 text-blue-700
+    {% endif %}" role="alert">
+            {{ message }}
+            <button type="button"
+                    class="ml-2 text-sm font-medium text-blue-700 hover:text-blue-800 focus:outline-none bg-gray-200 rounded-full w-8 h-8 flex items-center justify-center"
+                    data-dismiss="alert" aria-label="Close">×
+            </button>
+        </div>
+    {% endfor %}
+{% endfor %}
+
+<h1 class="text-4xl font-bold my-5 text-gray-800 pl-5">
+    {% block pageTitle %}{% endblock %}
+</h1>
+
 <div class="flex flex-col min-h-screen">
     <div class="w-full p-5">
         {% block body %}{% endblock %}
     </div>
 </div>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('[data-dismiss="alert"]').forEach(function (button) {
+            button.addEventListener('click', function () {
+                button.parentElement.style.display = 'none';
+            });
+        });
+    });
+</script>
 </body>
 </html>

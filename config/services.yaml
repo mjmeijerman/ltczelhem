@@ -1,5 +1,8 @@
 parameters:
-    default_email_sender: 'no-reply@markmeijerman.nl'
+    default_email_sender: '%env(string:DEFAULT_EMAIL_SENDER)%'
+    application_url: '%env(string:APPLICATION_URL)%'
+    app.supported_locales: 'nl|en'
+    app.default_locale: 'nl'
 
 services:
     _defaults:

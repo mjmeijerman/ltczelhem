@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block pageTitle %}
+    {% trans %}security.title{% endtrans %}
+{% endblock %}
+
+{% block body %}
+    {% if error %}
+        <div class="bg-red-500 text-white p-4 rounded mb-4">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+    {% endif %}
+
+    <form method="post" class="space-y-4">
+        <div class="form_input">
+            <label class="sr-only" for="inputUsername">{% trans %}security.email_address{% endtrans %}</label>
+            <input type="email" value="{{ last_username }}" name="_username" id="inputUsername" class="form-control block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" placeholder="{% trans %}security.email_address{% endtrans %}" required autofocus>
+        </div>
+        <div class="form_input mt-4 mb-4">
+            <label class="sr-only" for="inputPassword">{% trans %}security.password{% endtrans %}</label>
+            <input type="password" name="_password" id="inputPassword" class="form-control block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" placeholder="{% trans %}security.password{% endtrans %}" required>
+            <br /><a href="{{ path('getNewCredentials') }}" class="italic text-sm text-blue-500 hover:underline">{% trans %}security.forgot_password{% endtrans %}</a>
+        </div>
+
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+        <div class="mt-8">
+            <div class="checkbox">
+                <label class="inline-flex items-center">
+                    <input type="checkbox" name="_remember_me" class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out">
+                    <span class="ml-2">{% trans %}security.remember_me{% endtrans %}</span>
+                </label>
+            </div>
+            <button class="btn btn-theme font_size_11em mt-4 w-full inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" type="submit">
+                {% trans %}security.login_button{% endtrans %}
+            </button>
+        </div>
+    </form>
+{% endblock %}

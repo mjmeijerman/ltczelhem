@@ -1,0 +1,45 @@
+general:
+  something_went_wrong: 'Something went wrong, please try again later'
+
+email:
+  greeting: 'Dear %fullName%,'
+  footer: 'With kind regards,<br/>L.T.C. Zelhem'
+  new_user:
+    subject: 'L.T.C. Zelhem: Account created'
+    new_account_created: 'A user account has been created for <a href="%application_url%">%application_url%</a>.'
+    set_password: 'You can set your password using the following link: <a href="%setPasswordUrl%">%setPasswordUrl%</a>.'
+    token_expires: 'Warning: above link will expire at %tokenExpiresAt%. When the link is expired, you could request a new link at <a href="%newCredentialsUrl%">%newCredentialsUrl%</a>.'
+  password_confirmation:
+    subject: 'New password set'
+    new_password_was_set: 'A new password has been set for your account at <a href="%application_url%">%application_url%</a>.'
+    reset_password: 'If this was not you, you can set a new password using the following link: <a href="%newCredentialsUrl%">%newCredentialsUrl%</a>.'
+  password_reset_requested:
+    subject: 'Password reset requested'
+    new_request: 'A password reset has been requested for <a href="%application_url%">%application_url%</a>.'
+    set_password: 'You can set your password using the following link: <a href="%setPasswordUrl%">%setPasswordUrl%</a>.'
+    token_expires: 'Warning: above link will expire at %tokenExpiresAt%. When the link is expired, you could request a new link at <a href="%newCredentialsUrl%">%newCredentialsUrl%</a>.'
+
+header_welcome: 'Welcome to L.T.C. Zelhem'
+
+security:
+  login: 'Login'
+  logout: 'Logout'
+  title: 'Login'
+  email_address: 'Email address'
+  password: 'Password'
+  forgot_password: 'Forgot password?'
+  remember_me: 'Remember me'
+  login_button: 'Login'
+  set_password: 'Set password'
+  invalid_token: 'Invalid token provided, request a new password'
+  password_again: 'Password again'
+  confirm_set_password: 'Confirm password'
+  passwords_not_equal: 'Passwords are not equal'
+  password_set: 'Password successfully set'
+  provide_email_address_for_new_password: 'Provide your email address to request a new password'
+  request_password_button: 'Request password'
+  request_new_password_title: 'Request new password'
+  password_reset_requested: 'If the email address is known, an email has been sent with instructions to set a new password'
+
+language_changed: 'Language changed to English'
+language_not_found: 'Language not found'

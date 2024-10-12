@@ -7,7 +7,7 @@ services:
       MYSQL_USER: ltc_zelhem
       MYSQL_PASSWORD: ltc_zelhem
     volumes:
-#      - database-ltc-zelhem:/var/lib/mysql
+      - database-ltc-zelhem:/var/lib/mysql
       - ./data:/docker-entrypoint-initdb.d
     ports:
       - "8195:3306"
@@ -54,7 +54,7 @@ services:
     volumes:
       - ./:/opt/project
 
-  mailer:
+  ltc-zelhem-mailer:
     image: axllent/mailpit
     labels:
       - "traefik.enable=true"

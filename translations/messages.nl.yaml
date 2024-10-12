@@ -1,0 +1,46 @@
+general:
+  something_went_wrong: 'Er is iets misgegaan, probeer het later opnieuw'
+
+email:
+  greeting: 'Beste %fullName%,'
+  footer: 'Met vriendelijke groet,<br/>L.T.C. Zelhem'
+  new_user:
+    subject: 'L.T.C. Zelhem: Account aangemaakt'
+    new_account_created: 'Er is een nieuw gebruikersaccount aangemaakt voor <a href="%application_url%">%application_url%</a>.'
+    set_password: 'Je kunt het wachtwoord instellen via de volgende link: <a href="%setPasswordUrl%">%setPasswordUrl%</a>.'
+    token_expires: 'Let op: bovenstaande link verloopt op %tokenExpiresAt%. Als de link verlopen is kun je een nieuwe link aanvragen via <a href="%newCredentialsUrl%">%newCredentialsUrl%</a>.'
+  password_confirmation:
+    subject: 'Nieuw wachtwoord ingesteld'
+    new_password_was_set: 'Er is een nieuw wachtwoord ingesteld voor je account bij <a href="%application_url%">%application_url%</a>.'
+    reset_password: 'Indien je dit niet zelf was kun je hier een nieuw wachtwoord instellen: <a href="%newCredentialsUrl%">%newCredentialsUrl%</a>.'
+  password_reset_requested:
+    subject: 'Wachtwoord reset aangevraagd'
+    new_request: 'Er is een wachtwoord reset aangevraagd voor <a href="%application_url%">%application_url%</a>.'
+    set_password:  'Je kunt het wachtwoord instellen via de volgende link: <a href="%setPasswordUrl%">%setPasswordUrl%</a>.'
+    token_expires: 'Let op: bovenstaande link verloopt op %tokenExpiresAt%. Als de link verlopen is kun je een nieuwe link aanvragen via <a href="%newCredentialsUrl%">%newCredentialsUrl%</a>.'
+
+header_welcome: 'Welkom bij L.T.C. Zelhem'
+
+security:
+  login: 'Inloggen'
+  logout: 'Uitloggen'
+  title: 'Inloggen'
+  email_address: 'Email adres'
+  password: 'Wachtwoord'
+  forgot_password: 'Wachtwoord vergeten?'
+  remember_me: 'Onthoud mij'
+  login_button: 'Inloggen'
+  set_password: 'Wachtwoord instellen'
+  invalid_token: 'Ongeldig token opgegeven, vraag een nieuw wachtwoord aan'
+  password_again: 'Wachtwoord nogmaals'
+  confirm_set_password: 'Bevestig wachtwoord'
+  passwords_not_equal: 'Wachtwoorden zijn niet gelijk'
+  password_set: 'Wachtwoord succesvol ingesteld'
+  provide_email_address_for_new_password: 'Vul je email adres in om een nieuw wachtwoord aan te vragen'
+  request_password_button: 'Wachtwoord aanvragen'
+  request_new_password_title: 'Nieuw wachtwoord aanvragen'
+  invalid_email_address: 'Ongeldig email adres ingevoerd'
+  password_reset_requested: 'Indien het email adres bekend is, is er een email verstuurd met instructies om een nieuw wachtwoord in te stellen'
+
+language_changed: 'Taal gewijzigd naar Nederlands'
+language_not_found: 'Taal kon niet gevonden worden'
