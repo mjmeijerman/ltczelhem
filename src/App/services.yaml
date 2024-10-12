@@ -4,6 +4,28 @@ services:
   _defaults:
     autowire: true
     autoconfigure: true
+    bind:
+      $defaultLocale: '%app.default_locale%'
+      'DateTimeZone $timeZone': !service
+        class: DateTimeZone
+        arguments: [ 'Europe/Amsterdam' ]
 
   LtcZelhem\App\:
     resource: './'
+
+  LtcZelhem\App\Application\Command\SendNewUserConfirmationHandler:
+    arguments:
+      $applicationUrl: '%application_url%'
+      $sender: '%default_email_sender%'
+      $translator: '@translator'
+
+  LtcZelhem\App\Application\Command\SendNewPasswordConfirmationHandler:
+    arguments:
+      $applicationUrl: '%application_url%'
+      $sender: '%default_email_sender%'
+
+  LtcZelhem\App\Application\Command\SendPasswordResetNotificationHandler:
+    arguments:
+      $applicationUrl: '%application_url%'
+      $sender: '%default_email_sender%'
+      $translator: '@translator'

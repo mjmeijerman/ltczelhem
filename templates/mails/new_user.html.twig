@@ -1,0 +1,10 @@
+<p>{% trans with {'%fullName%': fullName} %}email.greeting{% endtrans %}</p>
+
+<p>
+    {% trans with {'%application_url%': application_url} %}email.new_user.new_account_created{% endtrans %}<br />
+    {% trans with {'%setPasswordUrl%': setPasswordUrl} %}email.new_user.set_password{% endtrans %}
+</p>
+
+<p>{% trans with {'%tokenExpiresAt%': tokenExpiresAt, '%newCredentialsUrl%': newCredentialsUrl}%}email.new_user.token_expires{% endtrans %}</p>
+
+<p>{% trans %}email.footer{% endtrans %}</p>
