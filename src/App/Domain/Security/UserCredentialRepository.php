@@ -18,4 +18,6 @@ interface UserCredentialRepository
     public function insert(UserCredentials $user): void;
 
     public function update(UserCredentials $user): void;
+
+    public function remove(EmailAddress $emailAddress): void;
 }
