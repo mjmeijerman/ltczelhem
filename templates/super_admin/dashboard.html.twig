@@ -135,7 +135,6 @@
                     event.preventDefault();
                     const deleteUrl = this.getAttribute('href');
                     const userEmail = this.getAttribute('data-email');
-                    console.log(userEmail)
                     deleteForm.setAttribute('action', deleteUrl);
                     userEmailSpan.textContent = userEmail;
                     deleteModal.classList.remove('hidden');

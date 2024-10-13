@@ -70,6 +70,7 @@ final class SuperAdminController extends AbstractController
         }
 
         $userCredentialRepository->remove(new EmailAddress($emailAddress));
+        // todo: event UserWasRemoved => send mail about removal
         $this->addFlash('success', $translator->trans('super_admin.user_removed'));
 
         return $this->redirectToRoute('superAdminDashboard');
