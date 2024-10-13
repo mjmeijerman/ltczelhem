@@ -92,6 +92,8 @@
         {% block body %}{% endblock %}
     </div>
 </div>
+{% block javascripts %}
+{% endblock %}
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         document.querySelectorAll('[data-dismiss="alert"]').forEach(function (button) {

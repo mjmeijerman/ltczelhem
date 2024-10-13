@@ -29,10 +29,6 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 final class SecurityController extends AbstractController
 {
-    public function __construct()
-    {
-    }
-
     #[Route('/login', name: 'loginRoute', methods: ['GET', 'POST'])]
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
@@ -68,8 +64,7 @@ final class SecurityController extends AbstractController
         $role = $user->roles->first();
         switch ($role->value) {
             case UserRole::ROLE_SUPER_ADMIN->value:
-                exit('superAdminDashboard');
-                // return $this->redirectToRoute('superAdminDashboard');
+                return $this->redirectToRoute('superAdminDashboard');
             case UserRole::ROLE_ADMIN->value:
                 exit('adminDashboard');
                 // return $this->redirectToRoute('adminDashboard');

@@ -15,13 +15,13 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 final class DefaultController extends AbstractController
 {
-    public function __construct()
-    {
-    }
-
     #[Route('/', name: 'homepage')]
     public function homepage(): Response
     {
+        if ($this->getUser() instanceof UserCredentials) {
+            return $this->redirectToRoute('redirectToCorrectLoginPage');
+        }
+
         return $this->render('default/homepage.html.twig');
     }
 

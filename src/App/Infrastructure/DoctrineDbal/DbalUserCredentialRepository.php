@@ -153,6 +153,21 @@ final readonly class DbalUserCredentialRepository implements UserProviderInterfa
         $this->replaceUserRoles($user->emailAddress, $user->getRoles());
     }
 
+    public function remove(EmailAddress $emailAddress): void
+    {
+        $this->connection->createQueryBuilder()
+            ->delete('user_credentials')
+            ->andWhere('email_address = :emailAddress')
+            ->setParameter('emailAddress', $emailAddress->toString())
+            ->executeQuery();
+
+        $this->connection->createQueryBuilder()
+            ->delete('user_roles')
+            ->andWhere('email_address = :emailAddress')
+            ->setParameter('emailAddress', $emailAddress->toString())
+            ->executeQuery();
+    }
+
     public function supportsClass(string $class): bool
     {
         return UserCredentials::class === $class;

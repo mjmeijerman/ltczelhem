@@ -1,0 +1,174 @@
+{% extends 'base.html.twig' %}
+
+{% block pageTitle %}
+    <h1 class="text-4xl font-bold text-center my-5 text-gray-800">{% trans %}super_admin.dashboard{% endtrans %}</h1>
+    <h2 class="text-2xl text-center my-2 text-gray-600">{% trans %}super_admin.user_management{% endtrans %}</h2>
+    <p class="text-center text-gray-600 mb-4">{% trans with {'%name%': app.user.fullName} %}super_admin.welcome {% endtrans %}</p>
+{% endblock %}
+
+{% block body %}
+    <div class="container mx-auto px-4">
+        <div class="flex justify-end mb-4">
+            <a href="#" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 flex items-center add-user-button" title="{% trans %}super_admin.add_account{% endtrans %}">
+                <svg class="w-6 h-6 text-white mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                </svg>
+                {% trans %}super_admin.add_account{% endtrans %}
+            </a>
+        </div>
+        <div class="overflow-x-auto">
+            <table class="min-w-full bg-white shadow-md rounded-lg">
+                <thead>
+                <tr>
+                    <th class="py-2 px-4 border-b border-gray-200 text-left">{% trans %}super_admin.fullName{% endtrans %}</th>
+                    <th class="py-2 px-4 border-b border-gray-200 text-left">{% trans %}super_admin.email{% endtrans %}</th>
+                    <th class="py-2 px-4 border-b border-gray-200 text-left">{% trans %}super_admin.roles{% endtrans %}</th>
+                    <th class="py-2 px-4 border-b border-gray-200 text-left" colspan="3"></th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for user in users %}
+                    <tr class="hover:bg-gray-100">
+                        <td class="py-2 px-4 border-b border-gray-200">{{ user.fullName }}</td>
+                        <td class="py-2 px-4 border-b border-gray-200">{{ user.emailAddress }}</td>
+                        <td class="py-2 px-4 border-b border-gray-200">{{ user.roles.toStringArray|join(', ') }}</td>
+                        <td class="py-2 px-4 border-b border-gray-200 text-center">
+                            <a href="#" class="hover:text-yellow-700" title="{% trans %}super_admin.edit_account{% endtrans %}">
+{#                            <a href="{{ path('editUser', {id: user.id}) }}" class="hover:text-yellow-700" title="{% trans %}super_admin.edit_account{% endtrans %}">#}
+                                <svg class="w-4 h-4 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 20h9"></path>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16.5 3.5a2.121 2.121 0 113 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+                                </svg>
+                            </a>
+                        </td>
+                            <td class="py-2 px-4 border-b border-gray-200 text-center">
+                                {% if user.emailAddress != app.user.emailAddress.toString %}
+                                <a href="{{ path('superAdminRemoveUser', {emailAddress: user.emailAddress}) }}" class="hover:text-red-700 inline-block delete-button" data-email="{{ user.emailAddress }}" title="{% trans %}super_admin.remove_account{% endtrans %}">
+
+                                    <svg class="w-4 h-4 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                    </svg>
+                                </a>
+                                {% endif %}
+                            </td>
+                            <td class="py-2 px-4 border-b border-gray-200 text-center">
+                                {% if user.emailAddress != app.user.emailAddress.toString %}
+                                <a href="{{ impersonation_path(user.emailAddress) }}" class="hover:text-black" title="{% trans %}super_admin.impersonate_account{% endtrans %}">
+                                    <svg class="w-4 h-4 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"></path>
+                                    </svg>
+                                </a>
+                                {% endif %}
+                            </td>
+{#                        {% endif %}#}
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div id="deleteModal" class="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 hidden">
+        <div class="bg-white p-6 rounded shadow-lg">
+            <h2 class="text-xl mb-4">{% trans %}super_admin.confirm_delete{% endtrans %}</h2>
+            <p class="mb-4">{% trans %}super_admin.confirm_delete_message{% endtrans %}</p>
+            <p class="mb-4"><span id="userEmail" class="font-bold"></span></p>
+            <form id="deleteForm" method="post" action="">
+                <input type="hidden" name="_token" value="{{ csrf_token('delete_user') }}">
+                <div class="flex justify-end">
+                    <button type="button" id="cancelButton" class="bg-gray-500 text-white px-4 py-2 rounded mr-2">{% trans %}super_admin.cancel{% endtrans %}</button>
+                    <button type="submit" class="bg-red-500 text-white px-4 py-2 rounded">{% trans %}super_admin.confirm{% endtrans %}</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="addUserModal" class="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 hidden">
+        <div class="bg-white p-6 rounded shadow-lg w-1/2"> <!-- Adjusted width class -->
+            <h2 class="text-xl mb-4">{% trans %}super_admin.add_account{% endtrans %}</h2>
+            <form id="addUserForm" method="post" action="{{ path('superAdminAddUser') }}">
+                <input type="hidden" name="_token" value="{{ csrf_token('add_user') }}">
+                <div class="mb-4">
+                    <label for="fullName" class="block text-gray-700">{% trans %}super_admin.fullName{% endtrans %}</label>
+                    <input type="text" id="fullName" name="fullName" class="w-full px-3 py-2 border rounded" required>
+                </div>
+                <div class="mb-4">
+                    <label for="emailAddress" class="block text-gray-700">{% trans %}super_admin.email{% endtrans %}</label>
+                    <input type="email" id="emailAddress" name="emailAddress" class="w-full px-3 py-2 border rounded" required>
+                </div>
+                <div class="mb-4">
+                    <label for="roles" class="block text-gray-700">{% trans %}super_admin.roles{% endtrans %}</label>
+                    <select id="roles" name="roles[]" class="w-full px-3 py-2 border rounded" multiple required>
+                        {% for role in roles %}
+                            <option value="{{ role }}">{{ ('security.user_roles.' ~ role) | trans }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="mb-4">
+                    <label for="locale" class="block text-gray-700">{% trans %}general.locale{% endtrans %}</label>
+                    <select id="locale" name="locale" class="w-full px-3 py-2 border rounded" required>
+                        {% for locale in locales %}
+                            <option value="{{ locale }}">{{ ('general.locales.' ~ locale) | trans }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="flex justify-end">
+                    <button type="button" id="cancelAddUserButton" class="bg-gray-500 text-white px-4 py-2 rounded mr-2">{% trans %}super_admin.cancel{% endtrans %}</button>
+                    <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded">{% trans %}super_admin.add_account_button{% endtrans %}</button>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const deleteButtons = document.querySelectorAll('.delete-button');
+            const deleteModal = document.getElementById('deleteModal');
+            const cancelButton = document.getElementById('cancelButton');
+            const deleteForm = document.getElementById('deleteForm');
+            const userEmailSpan = document.getElementById('userEmail');
+
+            deleteButtons.forEach(button => {
+                button.addEventListener('click', function(event) {
+                    event.preventDefault();
+                    const deleteUrl = this.getAttribute('href');
+                    const userEmail = this.getAttribute('data-email');
+                    console.log(userEmail)
+                    deleteForm.setAttribute('action', deleteUrl);
+                    userEmailSpan.textContent = userEmail;
+                    deleteModal.classList.remove('hidden');
+                });
+            });
+
+            cancelButton.addEventListener('click', function() {
+                deleteModal.classList.add('hidden');
+            });
+
+            const addUserButton = document.querySelector('.add-user-button');
+            const addUserModal = document.getElementById('addUserModal');
+            const cancelAddUserButton = document.getElementById('cancelAddUserButton');
+            const addUserForm = document.getElementById('addUserForm');
+
+            addUserButton.addEventListener('click', function(event) {
+                event.preventDefault();
+                addUserModal.classList.remove('hidden');
+            });
+
+            cancelAddUserButton.addEventListener('click', function() {
+                addUserModal.classList.add('hidden');
+            });
+
+            addUserForm.addEventListener('submit', function(event) {
+                const rolesSelect = document.getElementById('roles');
+                const selectedRoles = Array.from(rolesSelect.selectedOptions).map(option => option.value);
+                const rolesInput = document.createElement('input');
+                rolesInput.type = 'hidden';
+                rolesInput.name = 'roles';
+                rolesInput.value = JSON.stringify(selectedRoles);
+                addUserForm.appendChild(rolesInput);
+            });
+        });
+    </script>
+{% endblock %}
