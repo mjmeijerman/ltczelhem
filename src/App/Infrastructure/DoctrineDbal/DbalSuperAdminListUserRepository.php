@@ -23,6 +23,7 @@ final readonly class DbalSuperAdminListUserRepository implements SuperAdminListU
             ->executeQuery();
 
         $users = [];
+        /** @var array<string, string> $row */
         foreach ($userResult->fetchAllAssociative() as $row) {
             $roleResult = $this->connection->createQueryBuilder()
                 ->select('role')
@@ -32,6 +33,7 @@ final readonly class DbalSuperAdminListUserRepository implements SuperAdminListU
                 ->executeQuery();
 
             $roles = [];
+            /** @var array<string, string> $roleRow */
             foreach ($roleResult->fetchAllAssociative() as $roleRow) {
                 $roles[] = UserRole::from($roleRow['role']);
             }

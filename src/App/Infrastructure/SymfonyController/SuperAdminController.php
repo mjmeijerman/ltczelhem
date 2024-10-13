@@ -47,7 +47,7 @@ final class SuperAdminController extends AbstractController
     #[Route('/super-admin/remove-user/{emailAddress}', name: 'superAdminRemoveUser', methods: ['POST'])]
     public function superAdminRemoveUser(string $emailAddress, Request $request, CsrfTokenManagerInterface $csrfTokenManager, TranslatorInterface $translator, UserCredentialRepository $userCredentialRepository): Response
     {
-        $token = new CsrfToken('delete_user', $request->request->get('_token'));
+        $token = new CsrfToken('delete_user', $request->request->getString('_token'));
 
         if (!$csrfTokenManager->isTokenValid($token)) {
             $this->addFlash('error', $translator->trans('general.something_went_wrong'));
@@ -77,7 +77,7 @@ final class SuperAdminController extends AbstractController
     #[Route('/super-admin/add-user', name: 'superAdminAddUser', methods: ['POST'])]
     public function superAdminAddUser(Request $request, CsrfTokenManagerInterface $csrfTokenManager, TranslatorInterface $translator, UserCredentialRepository $userCredentialRepository, MessageBusInterface $messageBus, Clock $clock): Response
     {
-        $token = new CsrfToken('add_user', $request->request->get('_token'));
+        $token = new CsrfToken('add_user', $request->request->getString('_token'));
         if (!$csrfTokenManager->isTokenValid($token)) {
             $this->addFlash('error', $translator->trans('general.something_went_wrong'));
 
@@ -85,19 +85,25 @@ final class SuperAdminController extends AbstractController
         }
 
         try {
-            $emailAddress = new EmailAddress($request->request->get('emailAddress'));
+            $emailAddress = new EmailAddress($request->request->getString('emailAddress'));
         } catch (\InvalidArgumentException $e) {
             $this->addFlash('error', $translator->trans('security.invalid_email_address'));
 
             return $this->redirectToRoute('superAdminDashboard');
         }
 
-        $postedRoles = json_decode($request->request->get('roles'), true);
+        $postedRoles = json_decode($request->request->getString('roles'), true);
+        if (!is_array($postedRoles)) {
+            $this->addFlash('error', $translator->trans('general.something_went_wrong'));
+
+            return $this->redirectToRoute('superAdminDashboard');
+        }
+
         $rolesArray = [];
         foreach ($postedRoles as $role) {
             try {
                 $rolesArray[] = UserRole::from($role);
-            } catch (\InvalidArgumentException) {
+            } catch (\Throwable) {
                 $this->addFlash('error', $translator->trans('general.something_went_wrong'));
 
                 return $this->redirectToRoute('superAdminDashboard');
@@ -105,13 +111,13 @@ final class SuperAdminController extends AbstractController
         }
         $roles = new Roles($rolesArray);
         try {
-            $locale = Locale::from($request->request->get('locale'));
+            $locale = Locale::from($request->request->getString('locale'));
         } catch (\InvalidArgumentException) {
             $this->addFlash('error', $translator->trans('general.something_went_wrong'));
 
             return $this->redirectToRoute('superAdminDashboard');
         }
-        $fullName = $request->request->get('fullName');
+        $fullName = $request->request->getString('fullName');
         $createdAt = $clock->now();
         $passwordToken = PasswordToken::generate();
         $tokenExpiresAt = $clock->now()->modify('+1 day');
