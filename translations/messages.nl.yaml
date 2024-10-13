@@ -73,3 +73,4 @@ super_admin:
   user_removed: 'Gebruiker is verwijderd'
   user_added: 'Gebruiker is toegevoegd'
   add_account_button: 'Account toevoegen'
+  user_already_exists: 'Gebruiker bestaat al'

@@ -68,3 +68,4 @@ super_admin:
   user_removed: 'User was removed'
   user_added: 'User was added'
   add_account_button: 'Add Account'
+  user_already_exists: 'User already exists'

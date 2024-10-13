@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace LtcZelhem\App\Infrastructure\SymfonyController;
 
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use LtcZelhem\App\Application\SuperAdmin\SuperAdminListUserRepository;
 use LtcZelhem\App\Domain\EmailAddress;
 use LtcZelhem\App\Domain\Events\NewUserWasCreated;
@@ -122,16 +123,22 @@ final class SuperAdminController extends AbstractController
         $passwordToken = PasswordToken::generate();
         $tokenExpiresAt = $clock->now()->modify('+1 day');
 
-        $this->userCredentialRepository->insert(new UserCredentials(
-            $roles,
-            $emailAddress,
-            null,
-            $passwordToken,
-            $tokenExpiresAt,
-            $createdAt,
-            $fullName,
-            $locale
-        ));
+        try {
+            $this->userCredentialRepository->insert(new UserCredentials(
+                $roles,
+                $emailAddress,
+                null,
+                $passwordToken,
+                $tokenExpiresAt,
+                $createdAt,
+                $fullName,
+                $locale
+            ));
+        } catch (UniqueConstraintViolationException) {
+            $this->addFlash('error', $translator->trans('super_admin.user_already_exists'));
+
+            return $this->redirectToRoute('superAdminDashboard');
+        }
 
         $messageBus->dispatch(new NewUserWasCreated(
             $emailAddress,
