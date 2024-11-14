@@ -22,7 +22,7 @@ final class DefaultController extends AbstractController
             return $this->redirectToRoute('redirectToCorrectLoginPage');
         }
 
-        return $this->render('default/homepage.html.twig');
+        return $this->redirectToRoute('loginRoute');
     }
 
     #[Route('/change-language/{language}', name: 'changeLanguage')]
