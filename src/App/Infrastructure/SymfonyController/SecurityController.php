@@ -56,24 +56,21 @@ final class SecurityController extends AbstractController
             return $this->redirectToRoute('dashboard');
         }
 
-        if ($user->roles->count() > 1) {
-            exit('select role');
-            // return $this->redirectToRoute('selectRole');
+        if ($user->getRolesAsRoleObject()->contains(UserRole::ROLE_SUPER_ADMIN)) {
+            return $this->redirectToRoute('superAdminDashboard');
         }
 
-        $role = $user->roles->first();
-        switch ($role->value) {
-            case UserRole::ROLE_SUPER_ADMIN->value:
-                return $this->redirectToRoute('superAdminDashboard');
-            case UserRole::ROLE_ADMIN->value:
-                exit('adminDashboard');
-                // return $this->redirectToRoute('adminDashboard');
-            case UserRole::ROLE_TRAINER->value:
-                exit('trainerDashboard');
-                // return $this->redirectToRoute('trainerDashboard');
-            default:
-                throw new \LogicException('Unknown role');
+        if ($user->getRolesAsRoleObject()->contains(UserRole::ROLE_ADMIN)) {
+            exit('adminDashboard');
+//            return $this->redirectToRoute('adminDashboard');
         }
+
+        if ($user->getRolesAsRoleObject()->contains(UserRole::ROLE_TRAINER)) {
+            exit('trainerDashboard');
+//            return $this->redirectToRoute('trainerDashboard');
+        }
+
+        throw new \LogicException('Unknown role');
     }
 
     #[Route('/logout', name: 'logout', methods: ['GET'])]
@@ -166,9 +163,9 @@ final class SecurityController extends AbstractController
         }
 
         $user->setPassword($password, $userPasswordHasher);
-        $userCredentialRepository->update($user);
+        $userCredentialRepository->update($user, $user->getEmailAddress());
 
-        $messageBus->dispatch(new NewPasswordWasSet($user->emailAddress, $user->fullName));
+        $messageBus->dispatch(new NewPasswordWasSet($user->getEmailAddress(), $user->getFullName()));
         $this->addFlash('success', $translator->trans('security.password_set'));
 
         return $this->redirectToRoute('loginRoute');
@@ -225,12 +222,12 @@ final class SecurityController extends AbstractController
         $passwordToken = PasswordToken::generate();
         $passwordTokenExpiresAt = $clock->now()->modify('+1 day');
         $user->setNewPasswordToken($passwordToken, $passwordTokenExpiresAt);
-        $userCredentialRepository->update($user);
+        $userCredentialRepository->update($user, $user->getEmailAddress());
 
         $messageBus->dispatch(
             new PasswordResetWasRequested(
-                $user->emailAddress,
-                $user->fullName,
+                $user->getEmailAddress(),
+                $user->getFullName(),
                 $passwordToken,
                 $passwordTokenExpiresAt,
                 $user->locale()

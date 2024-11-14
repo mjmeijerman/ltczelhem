@@ -30,6 +30,10 @@ security:
     ROLE_TRAINER: 'Trainer (beheert trainingen)'
     ROLE_ADMIN: 'Beheerder (kan trainers aanmaken en rapportages inzien)'
     ROLE_SUPER_ADMIN: 'Super Beheerder (kan beheerders aanmaken en accounts verwijderen)'
+  user_roles_short:
+    ROLE_TRAINER: 'Trainer'
+    ROLE_ADMIN: 'Beheerder'
+    ROLE_SUPER_ADMIN: 'Super Beheerder'
   login: 'Inloggen'
   logout: 'Uitloggen'
   title: 'Inloggen'
@@ -72,5 +76,7 @@ super_admin:
   cannot_remove_yourself: 'Je kunt jezelf niet verwijderen'
   user_removed: 'Gebruiker is verwijderd'
   user_added: 'Gebruiker is toegevoegd'
+  user_edited: 'Gebruiker is gewijzigd'
   add_account_button: 'Account toevoegen'
+  save_changes: 'Wijzigingen opslaan'
   user_already_exists: 'Gebruiker bestaat al'

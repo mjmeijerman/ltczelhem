@@ -26,6 +26,14 @@ email:
 header_welcome: 'Welcome to L.T.C. Zelhem'
 
 security:
+  user_roles:
+    ROLE_TRAINER: 'Trainer (manages training sessions)'
+    ROLE_ADMIN: 'Admin (can create trainers and view reports)'
+    ROLE_SUPER_ADMIN: 'Super Admin (can create, edit and remove accounts)'
+  user_roles_short:
+    ROLE_TRAINER: 'Trainer'
+    ROLE_ADMIN: 'Beheerder'
+    ROLE_SUPER_ADMIN: 'Super Beheerder'
   login: 'Login'
   logout: 'Logout'
   title: 'Login'
@@ -43,6 +51,7 @@ security:
   provide_email_address_for_new_password: 'Provide your email address to request a new password'
   request_password_button: 'Request password'
   request_new_password_title: 'Request new password'
+  invalid_email_address: 'Invalid email address'
   password_reset_requested: 'If the email address is known, an email has been sent with instructions to set a new password'
 
 language_changed: 'Language changed to English'
@@ -67,5 +76,7 @@ super_admin:
   cannot_remove_yourself: 'You cannot remove yourself'
   user_removed: 'User was removed'
   user_added: 'User was added'
+  user_edited: 'User was edited'
   add_account_button: 'Add Account'
+  save_changes: 'Save changes'
   user_already_exists: 'User already exists'

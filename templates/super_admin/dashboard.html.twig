@@ -31,15 +31,19 @@
                     <tr class="hover:bg-gray-100">
                         <td class="py-2 px-4 border-b border-gray-200">{{ user.fullName }}</td>
                         <td class="py-2 px-4 border-b border-gray-200">{{ user.emailAddress }}</td>
-                        <td class="py-2 px-4 border-b border-gray-200">{{ user.roles.toStringArray|join(', ') }}</td>
+                        <td class="py-2 px-4 border-b border-gray-200">
+                            {% for role in user.roles %}
+                            {{ ('security.user_roles_short.' ~ role.name) | trans }}{% if loop.index < user.roles|length %}, {% endif %}
+                            {% endfor %}
+                        </td>
                         <td class="py-2 px-4 border-b border-gray-200 text-center">
-                            <a href="#" class="hover:text-yellow-700" title="{% trans %}super_admin.edit_account{% endtrans %}">
-{#                            <a href="{{ path('editUser', {id: user.id}) }}" class="hover:text-yellow-700" title="{% trans %}super_admin.edit_account{% endtrans %}">#}
+                            <a href="#" class="hover:text-yellow-700 edit-button" data-fullname="{{ user.fullName }}" data-email="{{ user.emailAddress }}" data-roles="{{ user.roles.toStringArray|json_encode }}" title="{% trans %}super_admin.edit_account{% endtrans %}">
                                 <svg class="w-4 h-4 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 20h9"></path>
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16.5 3.5a2.121 2.121 0 113 3L7 19l-4 1 1-4L16.5 3.5z"></path>
                                 </svg>
                             </a>
+                        </td>
                         </td>
                             <td class="py-2 px-4 border-b border-gray-200 text-center">
                                 {% if user.emailAddress != app.user.emailAddress.toString %}
@@ -84,7 +88,7 @@
     </div>
 
     <div id="addUserModal" class="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 hidden">
-        <div class="bg-white p-6 rounded shadow-lg w-1/2"> <!-- Adjusted width class -->
+        <div class="bg-white p-6 rounded shadow-lg w-1/2" id="innerAddUserModal"> <!-- Adjusted width class -->
             <h2 class="text-xl mb-4">{% trans %}super_admin.add_account{% endtrans %}</h2>
             <form id="addUserForm" method="post" action="{{ path('superAdminAddUser') }}">
                 <input type="hidden" name="_token" value="{{ csrf_token('add_user') }}">
@@ -119,6 +123,36 @@
             </form>
         </div>
     </div>
+
+    <div id="editUserModal" class="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 hidden">
+        <div class="bg-white p-6 rounded shadow-lg w-1/2" id="innerEditUserModal">
+            <h2 class="text-xl mb-4">{% trans %}super_admin.edit_account{% endtrans %}</h2>
+            <form id="editUserForm" method="post" action="{{ path('superAdminEditUser') }}">
+                <input type="hidden" name="_token" value="{{ csrf_token('edit_user') }}">
+                <input type="hidden" id="oldEmailAddress" name="oldEmailAddress">
+                <div class="mb-4">
+                    <label for="editFullName" class="block text-gray-700">{% trans %}super_admin.fullName{% endtrans %}</label>
+                    <input type="text" id="editFullName" name="fullName" class="w-full px-3 py-2 border rounded" required>
+                </div>
+                <div class="mb-4">
+                    <label for="editEmailAddress" class="block text-gray-700">{% trans %}super_admin.email{% endtrans %}</label>
+                    <input type="email" id="editEmailAddress" name="emailAddress" class="w-full px-3 py-2 border rounded" required>
+                </div>
+                <div class="mb-4">
+                    <label for="editRoles" class="block text-gray-700">{% trans %}super_admin.roles{% endtrans %}</label>
+                    <select id="editRoles" name="roles[]" class="w-full px-3 py-2 border rounded" multiple required>
+                        {% for role in roles %}
+                            <option value="{{ role }}">{{ ('security.user_roles.' ~ role) | trans }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="flex justify-end">
+                    <button type="button" id="cancelEditUserButton" class="bg-gray-500 text-white px-4 py-2 rounded mr-2">{% trans %}super_admin.cancel{% endtrans %}</button>
+                    <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded">{% trans %}super_admin.save_changes{% endtrans %}</button>
+                </div>
+            </form>
+        </div>
+    </div>
 {% endblock %}
 
 {% block javascripts %}
@@ -147,6 +181,7 @@
 
             const addUserButton = document.querySelector('.add-user-button');
             const addUserModal = document.getElementById('addUserModal');
+            const innerAddUserModal = document.getElementById('innerAddUserModal');
             const cancelAddUserButton = document.getElementById('cancelAddUserButton');
             const addUserForm = document.getElementById('addUserForm');
 
@@ -159,7 +194,7 @@
                 addUserModal.classList.add('hidden');
             });
 
-            addUserForm.addEventListener('submit', function(event) {
+            addUserForm.addEventListener('submit', function() {
                 const rolesSelect = document.getElementById('roles');
                 const selectedRoles = Array.from(rolesSelect.selectedOptions).map(option => option.value);
                 const rolesInput = document.createElement('input');
@@ -167,6 +202,59 @@
                 rolesInput.name = 'roles';
                 rolesInput.value = JSON.stringify(selectedRoles);
                 addUserForm.appendChild(rolesInput);
+            });
+
+            document.addEventListener('click', function(event) {
+                if (!innerAddUserModal.contains(event.target) && !addUserButton.contains(event.target)) {
+                    addUserModal.classList.add('hidden');
+                }
+            });
+
+            const editButtons = document.querySelectorAll('.edit-button');
+            const editUserModal = document.getElementById('editUserModal');
+            const innerEditUserModal = document.getElementById('innerEditUserModal');
+            const cancelEditUserButton = document.getElementById('cancelEditUserButton');
+            const editUserForm = document.getElementById('editUserForm');
+
+            editButtons.forEach(button => {
+                button.addEventListener('click', function(event) {
+                    event.preventDefault();
+                    const fullName = this.getAttribute('data-fullname');
+                    const emailAddress = this.getAttribute('data-email');
+                    const roles = JSON.parse(this.getAttribute('data-roles'));
+
+                    document.getElementById('oldEmailAddress').value = emailAddress;
+                    document.getElementById('editFullName').value = fullName;
+                    document.getElementById('editEmailAddress').value = emailAddress;
+
+                    const rolesSelect = document.getElementById('editRoles');
+                    Array.from(rolesSelect.options).forEach(option => {
+                        option.selected = roles.includes(option.value);
+                    });
+
+                    editUserModal.classList.remove('hidden');
+                });
+            });
+
+            cancelEditUserButton.addEventListener('click', function() {
+                editUserModal.classList.add('hidden');
+            });
+
+            editUserForm.addEventListener('submit', function() {
+                console.log('submit edit form');
+                const rolesSelect = document.getElementById('editRoles');
+                const selectedRoles = Array.from(rolesSelect.selectedOptions).map(option => option.value);
+                const rolesInput = document.createElement('input');
+                rolesInput.type = 'hidden';
+                rolesInput.name = 'roles';
+                rolesInput.value = JSON.stringify(selectedRoles);
+                editUserForm.appendChild(rolesInput);
+            });
+
+            document.addEventListener('click', function(event) {
+                if (!innerEditUserModal.contains(event.target) && !Array.from(editButtons).some(button => button.contains(event.target))) {
+                    editUserModal.classList.add('hidden');
+                }
             });
         });
     </script>

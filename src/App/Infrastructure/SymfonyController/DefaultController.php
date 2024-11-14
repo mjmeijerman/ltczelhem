@@ -47,7 +47,7 @@ final class DefaultController extends AbstractController
         $user = $this->getUser();
         if ($user instanceof UserCredentials) {
             $user->changeLocale($locale);
-            $userCredentialRepository->update($user);
+            $userCredentialRepository->update($user, $user->getEmailAddress());
         }
 
 

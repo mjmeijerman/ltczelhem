@@ -115,11 +115,11 @@ final readonly class DbalUserCredentialRepository implements UserProviderInterfa
                 ]
             )->setParameters(
                 [
-                    'emailAddress' => $user->emailAddress->toString(),
+                    'emailAddress' => $user->getEmailAddress()->toString(),
                     'passwordToken' => $user->passwordToken()?->toString(),
                     'tokenExpiresAt' => $user->tokenExpiresAt(),
                     'createdAt' => $user->createdAt,
-                    'fullName' => $user->fullName,
+                    'fullName' => $user->getFullName(),
                     'locale' => $user->locale()->value,
                 ],
                 [
@@ -128,10 +128,10 @@ final readonly class DbalUserCredentialRepository implements UserProviderInterfa
                 ]
             )->executeQuery();
 
-        $this->insertUserRoles($user->emailAddress, $user->getRoles());
+        $this->insertUserRoles($user->getEmailAddress(), $user->getRoles());
     }
 
-    public function update(UserCredentials $user): void
+    public function update(UserCredentials $user, EmailAddress $oldEmailAddress): void
     {
         $this->connection->createQueryBuilder()
             ->update('user_credentials')
@@ -139,18 +139,22 @@ final readonly class DbalUserCredentialRepository implements UserProviderInterfa
             ->set('password_token', ':passwordToken')
             ->set('token_expires_at', ':tokenExpiresAt')
             ->set('locale', ':locale')
-            ->andWhere('email_address = :emailAddress')
+            ->set('email_address', ':emailAddress')
+            ->set('full_name', ':fullName')
+            ->andWhere('email_address = :oldEmailAddress')
             ->setParameters(
                 [
                     'password' => $user->encryptedPassword(),
                     'passwordToken' => $user->passwordToken()?->toString(),
                     'tokenExpiresAt' => $user->tokenExpiresAt()?->format('Y-m-d H:i:s'),
                     'locale' => $user->locale()->value,
-                    'emailAddress' => $user->emailAddress->toString(),
+                    'emailAddress' => $user->getEmailAddress()->toString(),
+                    'oldEmailAddress' => $oldEmailAddress->toString(),
+                    'fullName' => $user->getFullName(),
                 ]
             )->executeQuery();
 
-        $this->replaceUserRoles($user->emailAddress, $user->getRoles());
+        $this->replaceUserRoles($user->getEmailAddress(), $user->getRoles());
     }
 
     public function remove(EmailAddress $emailAddress): void

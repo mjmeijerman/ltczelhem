@@ -13,13 +13,13 @@ use Symfony\Component\Security\Core\User\UserInterface;
 final class UserCredentials implements UserInterface, PasswordAuthenticatedUserInterface
 {
     public function __construct(
-        public readonly Roles $roles,
-        public readonly EmailAddress $emailAddress,
+        private Roles $roles,
+        private EmailAddress $emailAddress,
         private ?string $encryptedPassword,
         private ?PasswordToken $passwordToken,
         private ?\DateTimeImmutable $tokenExpiresAt,
         public readonly \DateTimeImmutable $createdAt,
-        public readonly string $fullName,
+        private string $fullName,
         private Locale $locale,
     ) {
     }
@@ -32,9 +32,24 @@ final class UserCredentials implements UserInterface, PasswordAuthenticatedUserI
         return $this->roles->toStringArray();
     }
 
+    public function getRolesAsRoleObject(): Roles
+    {
+        return $this->roles;
+    }
+
     public function getPassword(): ?string
     {
         return $this->encryptedPassword;
+    }
+
+    public function getFullName(): string
+    {
+        return $this->fullName;
+    }
+
+    public function getEmailAddress(): EmailAddress
+    {
+        return $this->emailAddress;
     }
 
     public function eraseCredentials(): void
@@ -82,5 +97,15 @@ final class UserCredentials implements UserInterface, PasswordAuthenticatedUserI
     public function changeLocale(Locale $locale): void
     {
         $this->locale = $locale;
+    }
+
+    public function superAdminChangeUserDetails(
+        string $fullName,
+        EmailAddress $emailAddress,
+        Roles $roles,
+    ): void {
+        $this->fullName = $fullName;
+        $this->emailAddress = $emailAddress;
+        $this->roles = $roles;
     }
 }

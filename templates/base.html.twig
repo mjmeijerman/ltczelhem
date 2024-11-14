@@ -34,20 +34,42 @@
             </a>
         </div>
         {% if app.user %}
+            {% if app.user.roles|length > 1 %}
+                <div class="relative">
+                    <select id="roleDropdown" class="form-select">
+                        {% for role in app.user.roles %}
+                            {% if role == 'ROLE_SUPER_ADMIN' %}
+                                <option value="{{ path('superAdminDashboard') }}"
+                            {% elseif role == 'ROLE_ADMIN' %}
+                                <option value="#"
+                            {% elseif role == 'ROLE_TRAINER' %}
+                                <option value="#"
+                            {% endif %}
+                            {% if role == 'ROLE_SUPER_ADMIN' and 'super-admin' in app.request.uri %} selected
+                            {% elseif role == 'ROLE_ADMIN' and 'admin' in app.request.uri %} selected
+                            {% elseif role == 'ROLE_TRAINER' and 'trainer' in app.request.uri %} selected {% endif %}
+                            >
+                            {{ ('security.user_roles_short.' ~ role) | trans }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+            {% endif %}
             {% if is_granted('IS_IMPERSONATOR') %}
-                <a href="{{ impersonation_exit_path(path('loginRoute') ) }}" class="flex items-center">
+            <a href="{{ impersonation_exit_path(path('loginRoute') ) }}" class="flex items-center">
                     <img src="{{ asset('static_images/login.svg') }}"
                          class="mr-2"/> {% trans %}security.logout{% endtrans %}
                 </a>
             {% else %}
-                <a href="{{ path('logout') }}" class="flex items-center">
+            <a href="{{ path('logout') }}" class="flex items-center">
                     <img src="{{ asset('static_images/login.svg') }}"
                          class="mr-2"/> {% trans %}security.logout{% endtrans %}
                 </a>
-            {% endif %}
+        {% endif %}
         {% else %}
             <a href="{{ path('loginRoute') }}" class="flex items-center">
-                <img src="{{ asset('static_images/login.svg') }}" class="mr-2"/> <span class="pr-4">{% trans %}security.login{% endtrans %}</span>
+                <img src="{{ asset('static_images/login.svg') }}" class="mr-2"/> <span
+                        class="pr-4">{% trans %}security.login{% endtrans %}</span>
             </a>
 
         {% endif %}
@@ -87,7 +109,7 @@
     {% block pageTitle %}{% endblock %}
 </h1>
 
-<div class="flex flex-col min-h-screen">
+<div class="flex flex-col">
     <div class="w-full p-5">
         {% block body %}{% endblock %}
     </div>
@@ -100,6 +122,11 @@
             button.addEventListener('click', function () {
                 button.parentElement.style.display = 'none';
             });
+        });
+
+        const roleDropdown = document.getElementById('roleDropdown');
+        roleDropdown.addEventListener('change', function () {
+            window.location.href = this.value;
         });
     });
 </script>

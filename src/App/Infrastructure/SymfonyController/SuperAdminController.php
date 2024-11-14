@@ -20,6 +20,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Core\Exception\UserNotFoundException;
 use Symfony\Component\Security\Csrf\CsrfToken;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
@@ -63,7 +64,7 @@ final class SuperAdminController extends AbstractController
             return $this->redirectToRoute('superAdminDashboard');
         }
 
-        if ($emailAddress === $user->emailAddress->toString()) {
+        if ($emailAddress === $user->getEmailAddress()->toString()) {
             $this->addFlash('error', $translator->trans('super_admin.cannot_remove_yourself'));
 
             return $this->redirectToRoute('superAdminDashboard');
@@ -150,6 +151,73 @@ final class SuperAdminController extends AbstractController
         ));
 
         $this->addFlash('success', $translator->trans('super_admin.user_added'));
+
+        return $this->redirectToRoute('superAdminDashboard');
+    }
+
+    #[Route('/super-admin/edit-user', name: 'superAdminEditUser', methods: ['POST'])]
+    public function superAdminEditUser(Request $request, CsrfTokenManagerInterface $csrfTokenManager, TranslatorInterface $translator, UserCredentialRepository $userCredentialRepository, MessageBusInterface $messageBus, Clock $clock): Response
+    {
+        try {
+            $oldEmailAddress = new EmailAddress($request->request->getString('oldEmailAddress'));
+        } catch (\InvalidArgumentException $e) {
+            $this->addFlash('error', $translator->trans('security.invalid_email_address'));
+
+            return $this->redirectToRoute('superAdminDashboard');
+        }
+
+        try {
+            $userToBeChanged = $userCredentialRepository->loadUserByEmailAddress($oldEmailAddress);
+        } catch (UserNotFoundException) {
+            $this->addFlash('error', $translator->trans('general.something_went_wrong'));
+
+            return $this->redirectToRoute('superAdminDashboard');
+        }
+
+        $token = new CsrfToken('edit_user', $request->request->getString('_token'));
+        if (!$csrfTokenManager->isTokenValid($token)) {
+            $this->addFlash('error', $translator->trans('general.something_went_wrong'));
+
+            return $this->redirectToRoute('superAdminDashboard');
+        }
+
+        try {
+            $emailAddress = new EmailAddress($request->request->getString('emailAddress'));
+        } catch (\InvalidArgumentException $e) {
+            $this->addFlash('error', $translator->trans('security.invalid_email_address'));
+
+            return $this->redirectToRoute('superAdminDashboard');
+        }
+
+        $postedRoles = json_decode($request->request->getString('roles'), true);
+        if (!is_array($postedRoles)) {
+            $this->addFlash('error', $translator->trans('general.something_went_wrong'));
+
+            return $this->redirectToRoute('superAdminDashboard');
+        }
+
+        $rolesArray = [];
+        foreach ($postedRoles as $role) {
+            try {
+                $rolesArray[] = UserRole::from($role);
+            } catch (\Throwable) {
+                $this->addFlash('error', $translator->trans('general.something_went_wrong'));
+
+                return $this->redirectToRoute('superAdminDashboard');
+            }
+        }
+        $roles = new Roles($rolesArray);
+        $fullName = $request->request->getString('fullName');
+
+        $userToBeChanged->superAdminChangeUserDetails(
+            $fullName,
+            $emailAddress,
+            $roles
+        );
+
+        $this->userCredentialRepository->update($userToBeChanged, $oldEmailAddress);
+
+        $this->addFlash('success', $translator->trans('super_admin.user_edited'));
 
         return $this->redirectToRoute('superAdminDashboard');
     }
