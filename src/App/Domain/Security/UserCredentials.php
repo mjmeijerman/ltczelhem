@@ -71,6 +71,10 @@ final class UserCredentials implements UserInterface, PasswordAuthenticatedUserI
 
     public function getUserIdentifier(): string
     {
+        if (empty($this->emailAddress->toString())) {
+            throw new \RuntimeException('User identifier is empty');
+        }
+
         return $this->emailAddress->toString();
     }
 
