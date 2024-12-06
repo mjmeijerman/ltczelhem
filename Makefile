@@ -11,6 +11,15 @@ setup: config up
 	docker run -it -w=/opt/project --mount src="$(shell pwd)",target=/opt/project,type=bind node:alpine npm install
 	dev/composer install
 	dev/console doctrine:migrations:migrate --no-interaction --allow-no-migration
+	@echo "/*******************************************/"
+	@echo "/*    Visit the app:                       */"
+	@echo "/*    http://ltc-zelhem.localhost/login    */"
+	@echo "/*    Username: markmeijerman@hotmail.com  */"
+	@echo "/*    Password: admin                      */"
+	@echo "/*                                         */"
+	@echo "/*    Mailbox:                             */"
+	@echo "/*    http://mailer.ltc-zelhem.localhost   */"
+	@echo "/*******************************************/"
 
 ## build: 	Build the docker containers
 .PHONY: build
@@ -151,3 +160,8 @@ watch:
 .PHONY: update-ansible-roles
 update-ansible-roles:
 	ansible-galaxy install -f -r ansible/ansible-galaxy.yml
+
+## dump-dev-database: Dump the dev database
+.PHONY: dump-dev-database
+dump-dev-database:
+	docker compose exec ltc-zelhem-database mysqldump -ultc_zelhem -pltc_zelhem ltc_zelhem > data/database.sql
