@@ -65,14 +65,14 @@ final class SuperAdminController extends AbstractController
         }
 
         if ($emailAddress === $user->getEmailAddress()->toString()) {
-            $this->addFlash('error', $translator->trans('super_admin.cannot_remove_yourself'));
+            $this->addFlash('error', $translator->trans('admin.cannot_remove_yourself'));
 
             return $this->redirectToRoute('superAdminDashboard');
         }
 
         $userCredentialRepository->remove(new EmailAddress($emailAddress));
         // todo: event UserWasRemoved => send mail about removal
-        $this->addFlash('success', $translator->trans('super_admin.user_removed'));
+        $this->addFlash('success', $translator->trans('admin.user_removed'));
 
         return $this->redirectToRoute('superAdminDashboard');
     }
@@ -137,7 +137,7 @@ final class SuperAdminController extends AbstractController
                 $locale
             ));
         } catch (UniqueConstraintViolationException) {
-            $this->addFlash('error', $translator->trans('super_admin.user_already_exists'));
+            $this->addFlash('error', $translator->trans('admin.user_already_exists'));
 
             return $this->redirectToRoute('superAdminDashboard');
         }
@@ -150,7 +150,7 @@ final class SuperAdminController extends AbstractController
             $locale
         ));
 
-        $this->addFlash('success', $translator->trans('super_admin.user_added'));
+        $this->addFlash('success', $translator->trans('admin.user_added'));
 
         return $this->redirectToRoute('superAdminDashboard');
     }
@@ -217,7 +217,7 @@ final class SuperAdminController extends AbstractController
 
         $this->userCredentialRepository->update($userToBeChanged, $oldEmailAddress);
 
-        $this->addFlash('success', $translator->trans('super_admin.user_edited'));
+        $this->addFlash('success', $translator->trans('admin.user_edited'));
 
         return $this->redirectToRoute('superAdminDashboard');
     }
