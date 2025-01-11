@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 
-namespace LtcZelhem\App\Application\SuperAdmin;
+namespace LtcZelhem\App\Application\Admin;
 
 use LtcZelhem\App\Domain\Security\Roles;
 
-final readonly class SuperAdminListUser
+final readonly class AdminListUser
 {
     public function __construct(
         public string $fullName,

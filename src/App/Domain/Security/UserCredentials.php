@@ -103,7 +103,7 @@ final class UserCredentials implements UserInterface, PasswordAuthenticatedUserI
         $this->locale = $locale;
     }
 
-    public function superAdminChangeUserDetails(
+    public function adminChangeUserDetails(
         string $fullName,
         EmailAddress $emailAddress,
         Roles $roles,

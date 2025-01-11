@@ -6,7 +6,6 @@ enum UserRole: string
 {
     case ROLE_TRAINER = 'ROLE_TRAINER';
     case ROLE_ADMIN = 'ROLE_ADMIN';
-    case ROLE_SUPER_ADMIN = 'ROLE_SUPER_ADMIN';
 
     public function equals(UserRole $other): bool
     {
@@ -21,7 +20,6 @@ enum UserRole: string
         return [
             self::ROLE_TRAINER->value,
             self::ROLE_ADMIN->value,
-            self::ROLE_SUPER_ADMIN->value,
         ];
     }
 }
