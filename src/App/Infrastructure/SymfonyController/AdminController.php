@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace LtcZelhem\App\Infrastructure\SymfonyController;
 
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
-use LtcZelhem\App\Application\SuperAdmin\SuperAdminListUserRepository;
+use LtcZelhem\App\Application\Admin\AdminListUserRepository;
 use LtcZelhem\App\Domain\EmailAddress;
 use LtcZelhem\App\Domain\Events\NewUserWasCreated;
 use LtcZelhem\App\Domain\Security\PasswordToken;
@@ -26,65 +26,65 @@ use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-#[IsGranted('ROLE_SUPER_ADMIN')]
-final class SuperAdminController extends AbstractController
+#[IsGranted('ROLE_ADMIN')]
+final class AdminController extends AbstractController
 {
     public function __construct(private readonly UserCredentialRepository $userCredentialRepository)
     {
     }
 
-    #[Route('/super-admin/dashboard', name: 'superAdminDashboard', methods: ['GET'])]
-    public function dashboard(SuperAdminListUserRepository $superAdminListUserRepository): Response
+    #[Route('/admin/dashboard', name: 'adminDashboard', methods: ['GET'])]
+    public function dashboard(AdminListUserRepository $adminListUserRepository): Response
     {
         return $this->render(
-            'super_admin/dashboard.html.twig',
+            'admin/dashboard.html.twig',
             [
-                'users' => $superAdminListUserRepository->findAll(),
+                'users' => $adminListUserRepository->findAll(),
                 'roles' => UserRole::allAsStringArray(),
                 'locales' => Locale::allAsStringArray(),
             ]
         );
     }
 
-    #[Route('/super-admin/remove-user/{emailAddress}', name: 'superAdminRemoveUser', methods: ['POST'])]
-    public function superAdminRemoveUser(string $emailAddress, Request $request, CsrfTokenManagerInterface $csrfTokenManager, TranslatorInterface $translator, UserCredentialRepository $userCredentialRepository): Response
+    #[Route('/admin/remove-user/{emailAddress}', name: 'adminRemoveUser', methods: ['POST'])]
+    public function adminRemoveUser(string $emailAddress, Request $request, CsrfTokenManagerInterface $csrfTokenManager, TranslatorInterface $translator, UserCredentialRepository $userCredentialRepository): Response
     {
         $token = new CsrfToken('delete_user', $request->request->getString('_token'));
 
         if (!$csrfTokenManager->isTokenValid($token)) {
             $this->addFlash('error', $translator->trans('general.something_went_wrong'));
 
-            return $this->redirectToRoute('superAdminDashboard');
+            return $this->redirectToRoute('adminDashboard');
         }
 
         $user = $this->getUser();
         if (!$user instanceof UserCredentials) {
             $this->addFlash('error', $translator->trans('general.something_went_wrong'));
 
-            return $this->redirectToRoute('superAdminDashboard');
+            return $this->redirectToRoute('adminDashboard');
         }
 
         if ($emailAddress === $user->getEmailAddress()->toString()) {
             $this->addFlash('error', $translator->trans('admin.cannot_remove_yourself'));
 
-            return $this->redirectToRoute('superAdminDashboard');
+            return $this->redirectToRoute('adminDashboard');
         }
 
         $userCredentialRepository->remove(new EmailAddress($emailAddress));
         // todo: event UserWasRemoved => send mail about removal
         $this->addFlash('success', $translator->trans('admin.user_removed'));
 
-        return $this->redirectToRoute('superAdminDashboard');
+        return $this->redirectToRoute('adminDashboard');
     }
 
-    #[Route('/super-admin/add-user', name: 'superAdminAddUser', methods: ['POST'])]
-    public function superAdminAddUser(Request $request, CsrfTokenManagerInterface $csrfTokenManager, TranslatorInterface $translator, UserCredentialRepository $userCredentialRepository, MessageBusInterface $messageBus, Clock $clock): Response
+    #[Route('/admin/add-user', name: 'adminAddUser', methods: ['POST'])]
+    public function adminAddUser(Request $request, CsrfTokenManagerInterface $csrfTokenManager, TranslatorInterface $translator, UserCredentialRepository $userCredentialRepository, MessageBusInterface $messageBus, Clock $clock): Response
     {
         $token = new CsrfToken('add_user', $request->request->getString('_token'));
         if (!$csrfTokenManager->isTokenValid($token)) {
             $this->addFlash('error', $translator->trans('general.something_went_wrong'));
 
-            return $this->redirectToRoute('superAdminDashboard');
+            return $this->redirectToRoute('adminDashboard');
         }
 
         try {
@@ -92,14 +92,14 @@ final class SuperAdminController extends AbstractController
         } catch (\InvalidArgumentException $e) {
             $this->addFlash('error', $translator->trans('security.invalid_email_address'));
 
-            return $this->redirectToRoute('superAdminDashboard');
+            return $this->redirectToRoute('adminDashboard');
         }
 
         $postedRoles = json_decode($request->request->getString('roles'), true);
         if (!is_array($postedRoles)) {
             $this->addFlash('error', $translator->trans('general.something_went_wrong'));
 
-            return $this->redirectToRoute('superAdminDashboard');
+            return $this->redirectToRoute('adminDashboard');
         }
 
         $rolesArray = [];
@@ -109,7 +109,7 @@ final class SuperAdminController extends AbstractController
             } catch (\Throwable) {
                 $this->addFlash('error', $translator->trans('general.something_went_wrong'));
 
-                return $this->redirectToRoute('superAdminDashboard');
+                return $this->redirectToRoute('adminDashboard');
             }
         }
         $roles = new Roles($rolesArray);
@@ -118,7 +118,7 @@ final class SuperAdminController extends AbstractController
         } catch (\InvalidArgumentException) {
             $this->addFlash('error', $translator->trans('general.something_went_wrong'));
 
-            return $this->redirectToRoute('superAdminDashboard');
+            return $this->redirectToRoute('adminDashboard');
         }
         $fullName = $request->request->getString('fullName');
         $createdAt = $clock->now();
@@ -139,7 +139,7 @@ final class SuperAdminController extends AbstractController
         } catch (UniqueConstraintViolationException) {
             $this->addFlash('error', $translator->trans('admin.user_already_exists'));
 
-            return $this->redirectToRoute('superAdminDashboard');
+            return $this->redirectToRoute('adminDashboard');
         }
 
         $messageBus->dispatch(new NewUserWasCreated(
@@ -152,18 +152,18 @@ final class SuperAdminController extends AbstractController
 
         $this->addFlash('success', $translator->trans('admin.user_added'));
 
-        return $this->redirectToRoute('superAdminDashboard');
+        return $this->redirectToRoute('adminDashboard');
     }
 
-    #[Route('/super-admin/edit-user', name: 'superAdminEditUser', methods: ['POST'])]
-    public function superAdminEditUser(Request $request, CsrfTokenManagerInterface $csrfTokenManager, TranslatorInterface $translator, UserCredentialRepository $userCredentialRepository, MessageBusInterface $messageBus, Clock $clock): Response
+    #[Route('/admin/edit-user', name: 'adminEditUser', methods: ['POST'])]
+    public function adminEditUser(Request $request, CsrfTokenManagerInterface $csrfTokenManager, TranslatorInterface $translator, UserCredentialRepository $userCredentialRepository, MessageBusInterface $messageBus, Clock $clock): Response
     {
         try {
             $oldEmailAddress = new EmailAddress($request->request->getString('oldEmailAddress'));
         } catch (\InvalidArgumentException $e) {
             $this->addFlash('error', $translator->trans('security.invalid_email_address'));
 
-            return $this->redirectToRoute('superAdminDashboard');
+            return $this->redirectToRoute('adminDashboard');
         }
 
         try {
@@ -171,14 +171,14 @@ final class SuperAdminController extends AbstractController
         } catch (UserNotFoundException) {
             $this->addFlash('error', $translator->trans('general.something_went_wrong'));
 
-            return $this->redirectToRoute('superAdminDashboard');
+            return $this->redirectToRoute('adminDashboard');
         }
 
         $token = new CsrfToken('edit_user', $request->request->getString('_token'));
         if (!$csrfTokenManager->isTokenValid($token)) {
             $this->addFlash('error', $translator->trans('general.something_went_wrong'));
 
-            return $this->redirectToRoute('superAdminDashboard');
+            return $this->redirectToRoute('adminDashboard');
         }
 
         try {
@@ -186,14 +186,14 @@ final class SuperAdminController extends AbstractController
         } catch (\InvalidArgumentException $e) {
             $this->addFlash('error', $translator->trans('security.invalid_email_address'));
 
-            return $this->redirectToRoute('superAdminDashboard');
+            return $this->redirectToRoute('adminDashboard');
         }
 
         $postedRoles = json_decode($request->request->getString('roles'), true);
         if (!is_array($postedRoles)) {
             $this->addFlash('error', $translator->trans('general.something_went_wrong'));
 
-            return $this->redirectToRoute('superAdminDashboard');
+            return $this->redirectToRoute('adminDashboard');
         }
 
         $rolesArray = [];
@@ -203,13 +203,13 @@ final class SuperAdminController extends AbstractController
             } catch (\Throwable) {
                 $this->addFlash('error', $translator->trans('general.something_went_wrong'));
 
-                return $this->redirectToRoute('superAdminDashboard');
+                return $this->redirectToRoute('adminDashboard');
             }
         }
         $roles = new Roles($rolesArray);
         $fullName = $request->request->getString('fullName');
 
-        $userToBeChanged->superAdminChangeUserDetails(
+        $userToBeChanged->adminChangeUserDetails(
             $fullName,
             $emailAddress,
             $roles
@@ -219,6 +219,6 @@ final class SuperAdminController extends AbstractController
 
         $this->addFlash('success', $translator->trans('admin.user_edited'));
 
-        return $this->redirectToRoute('superAdminDashboard');
+        return $this->redirectToRoute('adminDashboard');
     }
 }

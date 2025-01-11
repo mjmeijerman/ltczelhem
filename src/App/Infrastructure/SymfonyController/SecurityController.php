@@ -53,16 +53,11 @@ final class SecurityController extends AbstractController
         if (!$user instanceof UserCredentials) {
             $this->addFlash('error', 'general.something_went_wrong');
 
-            return $this->redirectToRoute('dashboard');
-        }
-
-        if ($user->getRolesAsRoleObject()->contains(UserRole::ROLE_SUPER_ADMIN)) {
-            return $this->redirectToRoute('superAdminDashboard');
+            return $this->redirectToRoute('homepage');
         }
 
         if ($user->getRolesAsRoleObject()->contains(UserRole::ROLE_ADMIN)) {
-            exit('adminDashboard');
-//            return $this->redirectToRoute('adminDashboard');
+            return $this->redirectToRoute('adminDashboard');
         }
 
         if ($user->getRolesAsRoleObject()->contains(UserRole::ROLE_TRAINER)) {

@@ -44,27 +44,25 @@
                                 </svg>
                             </a>
                         </td>
-                        </td>
-                            <td class="py-2 px-4 border-b border-gray-200 text-center">
-                                {% if user.emailAddress != app.user.emailAddress.toString %}
-                                <a href="{{ path('superAdminRemoveUser', {emailAddress: user.emailAddress}) }}" class="hover:text-red-700 inline-block delete-button" data-email="{{ user.emailAddress }}" title="{% trans %}admin.remove_account{% endtrans %}">
+                        <td class="py-2 px-4 border-b border-gray-200 text-center">
+                            {% if user.emailAddress != app.user.emailAddress.toString %}
+                            <a href="{{ path('adminRemoveUser', {emailAddress: user.emailAddress}) }}" class="hover:text-red-700 inline-block delete-button" data-email="{{ user.emailAddress }}" title="{% trans %}admin.remove_account{% endtrans %}">
 
-                                    <svg class="w-4 h-4 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                                    </svg>
-                                </a>
-                                {% endif %}
-                            </td>
-                            <td class="py-2 px-4 border-b border-gray-200 text-center">
-                                {% if user.emailAddress != app.user.emailAddress.toString %}
-                                <a href="{{ impersonation_path(user.emailAddress) }}" class="hover:text-black" title="{% trans %}admin.impersonate_account{% endtrans %}">
-                                    <svg class="w-4 h-4 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"></path>
-                                    </svg>
-                                </a>
-                                {% endif %}
-                            </td>
-{#                        {% endif %}#}
+                                <svg class="w-4 h-4 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                </svg>
+                            </a>
+                            {% endif %}
+                        </td>
+                        <td class="py-2 px-4 border-b border-gray-200 text-center">
+                            {% if user.emailAddress != app.user.emailAddress.toString %}
+                            <a href="{{ impersonation_path(user.emailAddress) }}" class="hover:text-black" title="{% trans %}admin.impersonate_account{% endtrans %}">
+                                <svg class="w-4 h-4 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"></path>
+                                </svg>
+                            </a>
+                            {% endif %}
+                        </td>
                     </tr>
                 {% endfor %}
                 </tbody>
@@ -90,7 +88,7 @@
     <div id="addUserModal" class="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 hidden">
         <div class="bg-white p-6 rounded shadow-lg w-1/2" id="innerAddUserModal"> <!-- Adjusted width class -->
             <h2 class="text-xl mb-4">{% trans %}admin.add_account{% endtrans %}</h2>
-            <form id="addUserForm" method="post" action="{{ path('superAdminAddUser') }}">
+            <form id="addUserForm" method="post" action="{{ path('adminAddUser') }}">
                 <input type="hidden" name="_token" value="{{ csrf_token('add_user') }}">
                 <div class="mb-4">
                     <label for="fullName" class="block text-gray-700">{% trans %}general.fullName{% endtrans %}</label>
@@ -127,11 +125,11 @@
     <div id="editUserModal" class="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 hidden">
         <div class="bg-white p-6 rounded shadow-lg w-1/2" id="innerEditUserModal">
             <h2 class="text-xl mb-4">{% trans %}admin.edit_account{% endtrans %}</h2>
-            <form id="editUserForm" method="post" action="{{ path('superAdminEditUser') }}">
+            <form id="editUserForm" method="post" action="{{ path('adminEditUser') }}">
                 <input type="hidden" name="_token" value="{{ csrf_token('edit_user') }}">
                 <input type="hidden" id="oldEmailAddress" name="oldEmailAddress">
                 <div class="mb-4">
-                    <label for="editFullName" class="block text-gray-700">{% trans %}admin.fullName{% endtrans %}</label>
+                    <label for="editFullName" class="block text-gray-700">{% trans %}general.fullName{% endtrans %}</label>
                     <input type="text" id="editFullName" name="fullName" class="w-full px-3 py-2 border rounded" required>
                 </div>
                 <div class="mb-4">

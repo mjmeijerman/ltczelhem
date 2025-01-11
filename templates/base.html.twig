@@ -38,15 +38,12 @@
                 <div class="relative">
                     <select id="roleDropdown" class="form-select">
                         {% for role in app.user.roles %}
-                            {% if role == 'ROLE_SUPER_ADMIN' %}
-                                <option value="{{ path('superAdminDashboard') }}"
-                            {% elseif role == 'ROLE_ADMIN' %}
-                                <option value="#"
+                            {% if role == 'ROLE_ADMIN' %}
+                                <option value="{{ path('adminDashboard') }}"
                             {% elseif role == 'ROLE_TRAINER' %}
                                 <option value="#"
                             {% endif %}
-                            {% if role == 'ROLE_SUPER_ADMIN' and 'super-admin' in app.request.uri %} selected
-                            {% elseif role == 'ROLE_ADMIN' and 'admin' in app.request.uri %} selected
+                            {% if role == 'ROLE_ADMIN' and 'admin' in app.request.uri %} selected
                             {% elseif role == 'ROLE_TRAINER' and 'trainer' in app.request.uri %} selected {% endif %}
                             >
                             {{ ('security.user_roles_short.' ~ role) | trans }}

@@ -4,12 +4,12 @@ declare(strict_types=1);
 namespace LtcZelhem\App\Infrastructure\DoctrineDbal;
 
 use Doctrine\DBAL\Connection;
-use LtcZelhem\App\Application\SuperAdmin\SuperAdminListUser;
-use LtcZelhem\App\Application\SuperAdmin\SuperAdminListUserRepository;
+use LtcZelhem\App\Application\Admin\AdminListUser;
+use LtcZelhem\App\Application\Admin\AdminListUserRepository;
 use LtcZelhem\App\Domain\Security\Roles;
 use LtcZelhem\App\Domain\Security\UserRole;
 
-final readonly class DbalSuperAdminListUserRepository implements SuperAdminListUserRepository
+final readonly class DbalAdminListUserRepository implements AdminListUserRepository
 {
     public function __construct(private Connection $connection)
     {
@@ -38,7 +38,7 @@ final readonly class DbalSuperAdminListUserRepository implements SuperAdminListU
                 $roles[] = UserRole::from($roleRow['role']);
             }
 
-            $users[] = new SuperAdminListUser(
+            $users[] = new AdminListUser(
                 $row['full_name'],
                 $row['email_address'],
                 new Roles($roles)
