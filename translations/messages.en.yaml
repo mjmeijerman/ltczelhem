@@ -81,3 +81,12 @@ admin:
 activity_manager:
   dashboard: 'Activity manager dashboard'
   welcome: 'Welcome %name%. On this page you can manage activities.'
+  add_activity: 'Create a new activity'
+  activity_name: 'Activity name'
+  description_nl: 'Description in Dutch'
+  description_en: 'Description in English'
+  first_activity_date: 'Activity date (or planned start date)'
+  max_participants: 'Maximum number of participants'
+  subscribe_until: 'Subscribe until'
+  additional_managers: 'Additional managers of this activity'
+  add_activity_button: 'Add activity'

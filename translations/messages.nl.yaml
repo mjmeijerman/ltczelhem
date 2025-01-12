@@ -81,3 +81,12 @@ admin:
 activity_manager:
   dashboard: 'Activiteitenbeheerder dashboard'
   welcome: 'Welkom %name%. Op deze pagina kun je Activiteiten beheren.'
+  add_activity: 'Voeg een activiteit toe'
+  activity_name: 'Naam van de activiteit'
+  description_nl: 'Beschrijving in het Nederlands'
+  description_en: 'Eventueel beschrijving in het Engels'
+  first_activity_date: 'Datum van de activiteit (of de geplande startdatum)'
+  max_participants: 'Maximaal aantal deelnemers'
+  subscribe_until: 'Uiterste inschrijfdatum'
+  additional_managers: 'Eventueel extra beheerders van deze activiteit'
+  add_activity_button: 'Activiteit opslaan'

@@ -7,13 +7,105 @@
 
 {% block body %}
     <div class="container mx-auto px-4">
-        body
+        <div class="flex justify-end mb-4">
+            <a href="#" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 flex items-center add-activity-button" title="{% trans %}activity_manager.add_activity{% endtrans %}">
+                <svg class="w-6 h-6 text-white mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                </svg>
+                {% trans %}activity_manager.add_activity{% endtrans %}
+            </a>
+        </div>
+
+        <!-- Add the modal for creating a new activity -->
+        <div id="addActivityModal" class="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 hidden">
+            <div class="bg-white p-6 rounded shadow-lg w-1/2" id="innerAddActivityModal">
+                <h2 class="text-xl mb-4">{% trans %}activity_manager.add_activity{% endtrans %}</h2>
+                <form id="addActivityForm" method="post" action="{{ path('activityManagerCreateNewActivity') }}">
+                    <input type="hidden" name="_token" value="{{ csrf_token('add_activity') }}">
+                    <div class="mb-4">
+                        <label for="activityName" class="block text-gray-700">{% trans %}activity_manager.activity_name{% endtrans %} <span class="text-red-500">*</span></label>
+                        <input type="text" id="activityName" name="activityName" class="w-full px-3 py-2 border rounded" required>
+                    </div>
+                    <div class="mb-4">
+                        <label for="descriptionNl" class="block text-gray-700">{% trans %}activity_manager.description_nl{% endtrans %} <span class="text-red-500">*</span></label>
+                        <textarea id="descriptionNl" name="descriptionNl" class="w-full px-3 py-2 border rounded" required></textarea>
+                    </div>
+                    <div class="mb-4">
+                        <label for="descriptionEn" class="block text-gray-700">{% trans %}activity_manager.description_en{% endtrans %}</label>
+                        <textarea id="descriptionEn" name="descriptionEn" class="w-full px-3 py-2 border rounded"></textarea>
+                    </div>
+                    <div class="mb-4">
+                        <label for="firstActivityDate" class="block text-gray-700">{% trans %}activity_manager.first_activity_date{% endtrans %}</label>
+                        <input type="date" id="firstActivityDate" name="firstActivityDate" class="w-full px-3 py-2 border rounded">
+                    </div>
+                    <div class="mb-4">
+                        <label for="maxParticipants" class="block text-gray-700">{% trans %}activity_manager.max_participants{% endtrans %}</label>
+                        <input type="number" id="maxParticipants" name="maxParticipants" class="w-full px-3 py-2 border rounded">
+                    </div>
+                    <div class="mb-4">
+                        <label for="subscribeUntil" class="block text-gray-700">{% trans %}activity_manager.subscribe_until{% endtrans %}</label>
+                        <input type="date" id="subscribeUntil" name="subscribeUntil" class="w-full px-3 py-2 border rounded">
+                    </div>
+                    <div class="mb-4">
+                        <label for="additionalManagers" class="block text-gray-700">{% trans %}activity_manager.additional_managers{% endtrans %}</label>
+                        <select id="additionalManagers" name="additionalManagers[]" class="w-full px-3 py-2 border rounded" multiple>
+                            {% for manager in possibleActivityManagers %}
+                                {% if manager.emailAddress != app.user.emailAddress %}
+                                    <option value="{{ manager.emailAddress }}">{{ manager.fullName }}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="flex justify-end">
+                        <button type="button" id="cancelAddActivityButton" class="bg-gray-500 text-white px-4 py-2 rounded mr-2">{% trans %}general.cancel{% endtrans %}</button>
+                        <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded">{% trans %}activity_manager.add_activity_button{% endtrans %}</button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
 {% endblock %}
 
 {% block javascripts %}
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            const addActivityButton = document.querySelector('.add-activity-button');
+            const addActivityModal = document.getElementById('addActivityModal');
+            const innerAddActivityModal = document.getElementById('innerAddActivityModal');
+            const cancelAddActivityButton = document.getElementById('cancelAddActivityButton');
+            const additionalManagers = document.getElementById('additionalManagers');
+            const addActivityForm = document.getElementById('addActivityForm');
+
+            addActivityForm.addEventListener('submit', function() {
+                const additionalManagersSelect = document.getElementById('additionalManagers');
+                const selectedAdditionalManagers = Array.from(additionalManagersSelect.selectedOptions).map(option => option.value);
+                const additionalManagersInput = document.createElement('input');
+                additionalManagersInput.type = 'hidden';
+                additionalManagersInput.name = 'additionalManagers';
+                additionalManagersInput.value = JSON.stringify(selectedAdditionalManagers);
+                addActivityForm.appendChild(additionalManagersInput);
+            });
+
+            additionalManagers.addEventListener('mousedown', function(event) {
+                event.preventDefault();
+                const option = event.target;
+                option.selected = !option.selected;
+            });
+
+            addActivityButton.addEventListener('click', function(event) {
+                event.preventDefault();
+                addActivityModal.classList.remove('hidden');
+            });
+
+            cancelAddActivityButton.addEventListener('click', function() {
+                addActivityModal.classList.add('hidden');
+            });
+
+            document.addEventListener('click', function(event) {
+                if (!innerAddActivityModal.contains(event.target) && !addActivityButton.contains(event.target)) {
+                    addActivityModal.classList.add('hidden');
+                }
+            });
         });
     </script>
 {% endblock %}
