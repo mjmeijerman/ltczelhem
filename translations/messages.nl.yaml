@@ -77,3 +77,7 @@ admin:
   user_edited: 'Gebruiker is gewijzigd'
   add_account_button: 'Account toevoegen'
   user_already_exists: 'Gebruiker bestaat al'
+
+activity_manager:
+  dashboard: 'Activiteitenbeheerder dashboard'
+  welcome: 'Welkom %name%. Op deze pagina kun je Activiteiten beheren.'

@@ -37,18 +37,22 @@
             {% if app.user.roles|length > 1 %}
                 <div class="relative">
                     <select id="roleDropdown" class="form-select">
-                        {% for role in app.user.roles %}
-                            {% if role == 'ROLE_ADMIN' %}
+                            {% if 'ROLE_ADMIN' in app.user.roles %}
                                 <option value="{{ path('adminDashboard') }}"
-                            {% elseif role == 'ROLE_ACTIVITY_MANAGER' %}
-                                <option value="#"
+                                    {% if 'admin' in app.request.uri %} selected{% endif %}
+                                    >
+                                    {{ ('security.user_roles_short.ROLE_ADMIN') | trans }}
+                                </option>
                             {% endif %}
-                            {% if role == 'ROLE_ADMIN' and 'admin' in app.request.uri %} selected
-                            {% elseif role == 'ROLE_ACTIVITY_MANAGER' and 'activity-manager' in app.request.uri %} selected {% endif %}
-                            >
-                            {{ ('security.user_roles_short.' ~ role) | trans }}
-                            </option>
-                        {% endfor %}
+                            {% if 'ROLE_ACTIVITY_MANAGER' in app.user.roles %}
+                                <option value="{{ path('activityManagerDashboard') }}"
+                                {% if 'activity-manager' in app.request.uri %}
+                                    selected
+                                {% endif %}
+                                >
+                                {{ ('security.user_roles_short.ROLE_ACTIVITY_MANAGER') | trans }}
+                                </option>
+                            {% endif %}
                     </select>
                 </div>
             {% endif %}
