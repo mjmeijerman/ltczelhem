@@ -32,11 +32,11 @@ header_welcome: 'Welkom bij L.T.C. Zelhem'
 
 security:
   user_roles:
-    ROLE_TRAINER: 'Trainer (beheert trainingen)'
-    ROLE_ADMIN: 'Beheerder (kan trainers en beheerders aanmaken en rapportages inzien)'
+    ROLE_ACTIVITY_MANAGER: 'Activiteitenbeheerder (beheert activiteiten zoals bijvoobreeld trainingen)'
+    ROLE_ADMIN: 'Beheerder (kan activiteitenbeheerders en algemene beheerders aanmaken en rapportages inzien)'
   user_roles_short:
-    ROLE_TRAINER: 'Trainer'
-    ROLE_ADMIN: 'Beheerder'
+    ROLE_ACTIVITY_MANAGER: 'Activiteitenbeheerder'
+    ROLE_ADMIN: 'Algemene beheerder'
   login: 'Inloggen'
   logout: 'Uitloggen'
   title: 'Inloggen'
@@ -61,7 +61,7 @@ language_changed: 'Taal gewijzigd naar Nederlands'
 language_not_found: 'Taal kon niet gevonden worden'
 
 admin:
-  welcome: 'Welkom %name%. Op deze pagina kun je trainers/beheerders en trainingen/activiteiten beheren en rapportages downloaden.'
+  welcome: 'Welkom %name%. Op deze pagina kun je activiteitenbeheerders/algemene beheerders beheren en rapportages downloaden.'
   dashboard: 'Admin dashboard'
   user_management: 'Gebruikersbeheer'
   add_account: 'Account toevoegen'

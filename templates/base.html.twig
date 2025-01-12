@@ -40,11 +40,11 @@
                         {% for role in app.user.roles %}
                             {% if role == 'ROLE_ADMIN' %}
                                 <option value="{{ path('adminDashboard') }}"
-                            {% elseif role == 'ROLE_TRAINER' %}
+                            {% elseif role == 'ROLE_ACTIVITY_MANAGER' %}
                                 <option value="#"
                             {% endif %}
                             {% if role == 'ROLE_ADMIN' and 'admin' in app.request.uri %} selected
-                            {% elseif role == 'ROLE_TRAINER' and 'trainer' in app.request.uri %} selected {% endif %}
+                            {% elseif role == 'ROLE_ACTIVITY_MANAGER' and 'activity-manager' in app.request.uri %} selected {% endif %}
                             >
                             {{ ('security.user_roles_short.' ~ role) | trans }}
                             </option>

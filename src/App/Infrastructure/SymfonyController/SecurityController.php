@@ -60,9 +60,9 @@ final class SecurityController extends AbstractController
             return $this->redirectToRoute('adminDashboard');
         }
 
-        if ($user->getRolesAsRoleObject()->contains(UserRole::ROLE_TRAINER)) {
-            exit('trainerDashboard');
-//            return $this->redirectToRoute('trainerDashboard');
+        if ($user->getRolesAsRoleObject()->contains(UserRole::ROLE_ACTIVITY_MANAGER)) {
+            exit('activityManagerDashboard');
+//            return $this->redirectToRoute('activityManagerDashboard');
         }
 
         throw new \LogicException('Unknown role');

@@ -32,10 +32,10 @@ header_welcome: 'Welcome to L.T.C. Zelhem'
 
 security:
   user_roles:
-    ROLE_TRAINER: 'Trainer (manages training sessions)'
-    ROLE_ADMIN: 'Admin (can create trainers and other admins and view reports)'
+    ROLE_ACTIVITY_MANAGER: 'Activity manager (manages activities, like training sessions)'
+    ROLE_ADMIN: 'Admin (can create activity managers and other admins and view reports)'
   user_roles_short:
-    ROLE_TRAINER: 'Trainer'
+    ROLE_ACTIVITY_MANAGER: 'Activity manager'
     ROLE_ADMIN: 'Beheerder'
   login: 'Login'
   logout: 'Logout'
@@ -61,7 +61,7 @@ language_changed: 'Language changed to English'
 language_not_found: 'Language not found'
 
 admin:
-  welcome: 'Welcome %name%. On this page you can manage trainer/admin accounts and activities and download reports.'
+  welcome: 'Welcome %name%. On this page you can manage activity managers/admin accounts and download reports.'
   dashboard: 'Admin dashboard'
   user_management: 'User Management'
   add_account: 'Add Account'
