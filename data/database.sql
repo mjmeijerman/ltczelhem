@@ -89,7 +89,7 @@ CREATE TABLE `user_roles` (
 
 LOCK TABLES `user_roles` WRITE;
 /*!40000 ALTER TABLE `user_roles` DISABLE KEYS */;
-INSERT INTO `user_roles` VALUES ('markmeijerman@hotmail.com','ROLE_ADMIN'),('markmeijerman@hotmail.com','ROLE_TRAINER');
+INSERT INTO `user_roles` VALUES ('markmeijerman@hotmail.com','ROLE_ADMIN'),('markmeijerman@hotmail.com','ROLE_ACTIVITY_MANAGER');
 /*!40000 ALTER TABLE `user_roles` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;

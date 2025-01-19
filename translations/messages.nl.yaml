@@ -32,11 +32,11 @@ header_welcome: 'Welkom bij L.T.C. Zelhem'
 
 security:
   user_roles:
-    ROLE_TRAINER: 'Trainer (beheert trainingen)'
-    ROLE_ADMIN: 'Beheerder (kan trainers en beheerders aanmaken en rapportages inzien)'
+    ROLE_ACTIVITY_MANAGER: 'Activiteitenbeheerder (beheert activiteiten zoals bijvoobreeld trainingen)'
+    ROLE_ADMIN: 'Beheerder (kan activiteitenbeheerders en algemene beheerders aanmaken en rapportages inzien)'
   user_roles_short:
-    ROLE_TRAINER: 'Trainer'
-    ROLE_ADMIN: 'Beheerder'
+    ROLE_ACTIVITY_MANAGER: 'Activiteitenbeheerder'
+    ROLE_ADMIN: 'Algemene beheerder'
   login: 'Inloggen'
   logout: 'Uitloggen'
   title: 'Inloggen'
@@ -61,7 +61,7 @@ language_changed: 'Taal gewijzigd naar Nederlands'
 language_not_found: 'Taal kon niet gevonden worden'
 
 admin:
-  welcome: 'Welkom %name%. Op deze pagina kun je trainers/beheerders en trainingen/activiteiten beheren en rapportages downloaden.'
+  welcome: 'Welkom %name%. Op deze pagina kun je activiteitenbeheerders/algemene beheerders beheren en rapportages downloaden.'
   dashboard: 'Admin dashboard'
   user_management: 'Gebruikersbeheer'
   add_account: 'Account toevoegen'
@@ -77,3 +77,25 @@ admin:
   user_edited: 'Gebruiker is gewijzigd'
   add_account_button: 'Account toevoegen'
   user_already_exists: 'Gebruiker bestaat al'
+
+activity_manager:
+  dashboard: 'Activiteitenbeheerder dashboard'
+  welcome: 'Welkom %name%. Op deze pagina kun je Activiteiten beheren.'
+  add_activity: 'Voeg een activiteit toe'
+  activity_name: 'Naam van de activiteit'
+  description_nl: 'Beschrijving in het Nederlands'
+  description_en: 'Eventueel beschrijving in het Engels'
+  first_activity_date: 'Datum van de activiteit (of de geplande startdatum)'
+  max_participants: 'Maximaal aantal deelnemers'
+  subscribe_until: 'Uiterste inschrijfdatum'
+  additional_managers: 'Eventueel extra beheerders van deze activiteit'
+  add_activity_button: 'Activiteit opslaan'
+  create_new_activity:
+    name_cannot_be_empty: 'Naam van de activiteit mag niet leeg zijn'
+    dutch_description_cannot_be_empty: 'Beschrijving in het Nederlands mag niet leeg zijn'
+    start_date_must_be_valid: 'Startdatum moet geldig zijn'
+    start_date_must_be_in_future: 'Startdatum moet in de toekomst liggen'
+    max_participants_must_be_positive: 'Maximaal aantal deelnemers moet positief zijn'
+    subscribe_until_must_be_valid: 'Uiterste inschrijfdatum moet geldig zijn'
+    subscribe_until_date_must_be_in_future: 'Uiterste inschrijfdatum moet in de toekomst liggen'
+    success: 'Activiteit succesvol aangemaakt'

@@ -32,10 +32,10 @@ header_welcome: 'Welcome to L.T.C. Zelhem'
 
 security:
   user_roles:
-    ROLE_TRAINER: 'Trainer (manages training sessions)'
-    ROLE_ADMIN: 'Admin (can create trainers and other admins and view reports)'
+    ROLE_ACTIVITY_MANAGER: 'Activity manager (manages activities, like training sessions)'
+    ROLE_ADMIN: 'Admin (can create activity managers and other admins and view reports)'
   user_roles_short:
-    ROLE_TRAINER: 'Trainer'
+    ROLE_ACTIVITY_MANAGER: 'Activity manager'
     ROLE_ADMIN: 'Beheerder'
   login: 'Login'
   logout: 'Logout'
@@ -61,7 +61,7 @@ language_changed: 'Language changed to English'
 language_not_found: 'Language not found'
 
 admin:
-  welcome: 'Welcome %name%. On this page you can manage trainer/admin accounts and activities and download reports.'
+  welcome: 'Welcome %name%. On this page you can manage activity managers/admin accounts and download reports.'
   dashboard: 'Admin dashboard'
   user_management: 'User Management'
   add_account: 'Add Account'
@@ -77,3 +77,32 @@ admin:
   user_edited: 'User was edited'
   add_account_button: 'Add Account'
   user_already_exists: 'User already exists'
+
+activity_manager:
+  dashboard: 'Activity manager dashboard'
+  welcome: 'Welcome %name%. On this page you can manage activities.'
+  add_activity: 'Create a new activity'
+  activity_name: 'Activity name'
+  description_nl: 'Description in Dutch'
+  description_en: 'Description in English'
+  first_activity_date: 'Activity date (or planned start date)'
+  max_participants: 'Maximum number of participants'
+  subscribe_until: 'Subscribe until'
+  additional_managers: 'Additional managers of this activity'
+  add_activity_button: 'Add activity'
+  create_new_activity:
+    name_cannot_be_empty: 'Activity name cannot be empty'
+    dutch_description_cannot_be_empty: 'Dutch description cannot be empty'
+    start_date_must_be_valid: 'Start date must be valid'
+    start_date_must_be_in_future: 'Start date must be in the future'
+    max_participants_must_be_positive: 'Maximum number of participants must be positive'
+    subscribe_until_must_be_valid: 'Subscribe until date must be valid'
+    subscribe_until_date_must_be_in_future: 'Subscribe until date must be in the future'
+    success: 'Activity created successfully'
+
+
+
+
+
+
+
