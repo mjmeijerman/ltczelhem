@@ -90,3 +90,12 @@ activity_manager:
   subscribe_until: 'Uiterste inschrijfdatum'
   additional_managers: 'Eventueel extra beheerders van deze activiteit'
   add_activity_button: 'Activiteit opslaan'
+  create_new_activity:
+    name_cannot_be_empty: 'Naam van de activiteit mag niet leeg zijn'
+    dutch_description_cannot_be_empty: 'Beschrijving in het Nederlands mag niet leeg zijn'
+    start_date_must_be_valid: 'Startdatum moet geldig zijn'
+    start_date_must_be_in_future: 'Startdatum moet in de toekomst liggen'
+    max_participants_must_be_positive: 'Maximaal aantal deelnemers moet positief zijn'
+    subscribe_until_must_be_valid: 'Uiterste inschrijfdatum moet geldig zijn'
+    subscribe_until_date_must_be_in_future: 'Uiterste inschrijfdatum moet in de toekomst liggen'
+    success: 'Activiteit succesvol aangemaakt'

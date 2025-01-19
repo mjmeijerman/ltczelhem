@@ -90,3 +90,19 @@ activity_manager:
   subscribe_until: 'Subscribe until'
   additional_managers: 'Additional managers of this activity'
   add_activity_button: 'Add activity'
+  create_new_activity:
+    name_cannot_be_empty: 'Activity name cannot be empty'
+    dutch_description_cannot_be_empty: 'Dutch description cannot be empty'
+    start_date_must_be_valid: 'Start date must be valid'
+    start_date_must_be_in_future: 'Start date must be in the future'
+    max_participants_must_be_positive: 'Maximum number of participants must be positive'
+    subscribe_until_must_be_valid: 'Subscribe until date must be valid'
+    subscribe_until_date_must_be_in_future: 'Subscribe until date must be in the future'
+    success: 'Activity created successfully'
+
+
+
+
+
+
+
