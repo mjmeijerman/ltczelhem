@@ -109,6 +109,11 @@ final class ActivityManagerController extends AbstractController
         foreach ($activityManagersArray as $activityManager) {
             $activityManagers[] = new ActivityManager($activityManager);
         }
+
+        $loggedInUserEmail = $this->getUser()?->getUserIdentifier();
+        if ($loggedInUserEmail !== null) {
+            $activityManagers[] = new ActivityManager($loggedInUserEmail);
+        }
         $activityManagers = new ActivityManagers($activityManagers);
 
         $activityRepository->create(
