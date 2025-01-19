@@ -14,6 +14,9 @@ final readonly class DbalPossibleActivityManagerRepository implements PossibleAc
     ) {
     }
 
+    /**
+     * @return PossibleActivityManager[]
+     */
     public function findAll(): array
     {
         $query = $this->connection->createQueryBuilder()
@@ -25,6 +28,7 @@ final readonly class DbalPossibleActivityManagerRepository implements PossibleAc
 
         $statement = $query->executeQuery();
         $possibleActivityManagers = [];
+        /** @var array<string, string> $row */
         foreach ($statement->fetchAllAssociative() as $row) {
             $possibleActivityManagers[] = $this->hydrate($row);
         }
@@ -32,6 +36,9 @@ final readonly class DbalPossibleActivityManagerRepository implements PossibleAc
         return $possibleActivityManagers;
     }
 
+    /**
+     * @param array<string, string> $row
+     */
     private function hydrate(array $row): PossibleActivityManager
     {
         return new PossibleActivityManager(

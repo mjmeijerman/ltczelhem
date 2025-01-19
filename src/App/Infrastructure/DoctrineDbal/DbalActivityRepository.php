@@ -50,7 +50,7 @@ final readonly class DbalActivityRepository implements ActivityRepository
                 ]
             )->executeStatement();
 
-        foreach ($activity->activityManagers->toArray() as $activityManager) {
+        foreach ($activity->activityManagers as $activityManager) {
             $this->connection->createQueryBuilder()
                 ->insert('activity_manager')
                 ->values([
@@ -104,7 +104,7 @@ final readonly class DbalActivityRepository implements ActivityRepository
             ->setParameter('activityId', $activity->id->toString())
             ->executeStatement();
 
-        foreach ($activity->activityManagers->toArray() as $activityManager) {
+        foreach ($activity->activityManagers as $activityManager) {
             $this->connection->createQueryBuilder()
                 ->insert('activity_manager')
                 ->values([

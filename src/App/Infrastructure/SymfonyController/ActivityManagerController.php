@@ -59,8 +59,8 @@ final class ActivityManagerController extends AbstractController
             $this->addFlash('error', $translator->trans('activity_manager.create_new_activity.dutch_description_cannot_be_empty'));
         }
 
-        $descriptionEn = $request->request->get('descriptionEn') ?: null;
-        $startDate = $request->request->get('firstActivityDate') ?: null;
+        $descriptionEn = (string) $request->request->get('descriptionEn') ?: null;
+        $startDate = (string) $request->request->get('firstActivityDate') ?: null;
         if (!empty($startDate)) {
             try {
                 $startDate = new \DateTimeImmutable($startDate);
@@ -73,6 +73,8 @@ final class ActivityManagerController extends AbstractController
             }
         }
 
+        $startDate = $startDate instanceof \DateTimeImmutable ? $startDate : null;
+
         $maxParticipants = $request->request->get('maxParticipants') ?: null;
         if ($maxParticipants !== null) {
             $maxParticipants = (int) $maxParticipants;
@@ -81,7 +83,7 @@ final class ActivityManagerController extends AbstractController
             }
         }
 
-        $subscribeUntil = $request->request->get('subscribeUntil') ?: null;
+        $subscribeUntil = (string) $request->request->get('subscribeUntil') ?: null;
         if (!empty($subscribeUntil)) {
             try {
                 $subscribeUntil = new \DateTimeImmutable($subscribeUntil);
@@ -93,6 +95,8 @@ final class ActivityManagerController extends AbstractController
                 $this->addFlash('error', $translator->trans('activity_manager.create_new_activity.subscribe_until_date_must_be_in_future'));
             }
         }
+
+        $subscribeUntil = $subscribeUntil instanceof \DateTimeImmutable ? $subscribeUntil : null;
 
         $activityManagersArray = json_decode($request->request->getString('additionalManagers'), true);
         if (!is_array($activityManagersArray)) {
