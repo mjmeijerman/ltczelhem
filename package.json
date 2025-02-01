@@ -7,7 +7,7 @@
         "@babel/preset-env": "^7.26.7",
         "@symfony/webpack-encore": "^5.0.1",
         "autoprefixer": "^10.4.20",
-        "core-js": "^3.39.0",
+        "core-js": "^3.40.0",
         "postcss": "^8.5.1",
         "postcss-loader": "^8.1.1",
         "regenerator-runtime": "^0.14.1",
