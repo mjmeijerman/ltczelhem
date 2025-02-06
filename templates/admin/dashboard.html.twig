@@ -9,7 +9,7 @@
 {% block body %}
     <div class="container mx-auto px-4">
         <div class="flex justify-end mb-4">
-            <a href="#" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 flex items-center add-user-button" title="{% trans %}admin.add_account{% endtrans %}">
+            <a href="#" class="bg-green-500 text-white px-4 py-2 rounded-sm hover:bg-green-600 flex items-center add-user-button" title="{% trans %}admin.add_account{% endtrans %}">
                 <svg class="w-6 h-6 text-white mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
                 </svg>
@@ -71,36 +71,36 @@
     </div>
 
     <div id="deleteModal" class="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 hidden">
-        <div class="bg-white p-6 rounded shadow-lg">
+        <div class="bg-white p-6 rounded-sm shadow-lg">
             <h2 class="text-xl mb-4">{% trans %}admin.confirm_delete{% endtrans %}</h2>
             <p class="mb-4">{% trans %}admin.confirm_delete_message{% endtrans %}</p>
             <p class="mb-4"><span id="userEmail" class="font-bold"></span></p>
             <form id="deleteForm" method="post" action="">
                 <input type="hidden" name="_token" value="{{ csrf_token('delete_user') }}">
                 <div class="flex justify-end">
-                    <button type="button" id="cancelButton" class="bg-gray-500 text-white px-4 py-2 rounded mr-2">{% trans %}general.cancel{% endtrans %}</button>
-                    <button type="submit" class="bg-red-500 text-white px-4 py-2 rounded">{% trans %}general.confirm{% endtrans %}</button>
+                    <button type="button" id="cancelButton" class="bg-gray-500 text-white px-4 py-2 rounded-sm mr-2">{% trans %}general.cancel{% endtrans %}</button>
+                    <button type="submit" class="bg-red-500 text-white px-4 py-2 rounded-sm">{% trans %}general.confirm{% endtrans %}</button>
                 </div>
             </form>
         </div>
     </div>
 
     <div id="addUserModal" class="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 hidden">
-        <div class="bg-white p-6 rounded shadow-lg w-1/2" id="innerAddUserModal"> <!-- Adjusted width class -->
+        <div class="bg-white p-6 rounded-sm shadow-lg w-1/2" id="innerAddUserModal"> <!-- Adjusted width class -->
             <h2 class="text-xl mb-4">{% trans %}admin.add_account{% endtrans %}</h2>
             <form id="addUserForm" method="post" action="{{ path('adminAddUser') }}">
                 <input type="hidden" name="_token" value="{{ csrf_token('add_user') }}">
                 <div class="mb-4">
                     <label for="fullName" class="block text-gray-700">{% trans %}general.fullName{% endtrans %}</label>
-                    <input type="text" id="fullName" name="fullName" class="w-full px-3 py-2 border rounded" required>
+                    <input type="text" id="fullName" name="fullName" class="w-full px-3 py-2 border rounded-sm" required>
                 </div>
                 <div class="mb-4">
                     <label for="emailAddress" class="block text-gray-700">{% trans %}general.emailAddress{% endtrans %}</label>
-                    <input type="email" id="emailAddress" name="emailAddress" class="w-full px-3 py-2 border rounded" required>
+                    <input type="email" id="emailAddress" name="emailAddress" class="w-full px-3 py-2 border rounded-sm" required>
                 </div>
                 <div class="mb-4">
                     <label for="roles" class="block text-gray-700">{% trans %}admin.roles{% endtrans %}</label>
-                    <select id="roles" name="roles[]" class="w-full px-3 py-2 border rounded" multiple required>
+                    <select id="roles" name="roles[]" class="w-full px-3 py-2 border rounded-sm" multiple required>
                         {% for role in roles %}
                             <option value="{{ role }}">{{ ('security.user_roles.' ~ role) | trans }}</option>
                         {% endfor %}
@@ -108,45 +108,45 @@
                 </div>
                 <div class="mb-4">
                     <label for="locale" class="block text-gray-700">{% trans %}general.locale{% endtrans %}</label>
-                    <select id="locale" name="locale" class="w-full px-3 py-2 border rounded" required>
+                    <select id="locale" name="locale" class="w-full px-3 py-2 border rounded-sm" required>
                         {% for locale in locales %}
                             <option value="{{ locale }}">{{ ('general.locales.' ~ locale) | trans }}</option>
                         {% endfor %}
                     </select>
                 </div>
                 <div class="flex justify-end">
-                    <button type="button" id="cancelAddUserButton" class="bg-gray-500 text-white px-4 py-2 rounded mr-2">{% trans %}general.cancel{% endtrans %}</button>
-                    <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded">{% trans %}admin.add_account_button{% endtrans %}</button>
+                    <button type="button" id="cancelAddUserButton" class="bg-gray-500 text-white px-4 py-2 rounded-sm mr-2">{% trans %}general.cancel{% endtrans %}</button>
+                    <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded-sm">{% trans %}admin.add_account_button{% endtrans %}</button>
                 </div>
             </form>
         </div>
     </div>
 
     <div id="editUserModal" class="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 hidden">
-        <div class="bg-white p-6 rounded shadow-lg w-1/2" id="innerEditUserModal">
+        <div class="bg-white p-6 rounded-sm shadow-lg w-1/2" id="innerEditUserModal">
             <h2 class="text-xl mb-4">{% trans %}admin.edit_account{% endtrans %}</h2>
             <form id="editUserForm" method="post" action="{{ path('adminEditUser') }}">
                 <input type="hidden" name="_token" value="{{ csrf_token('edit_user') }}">
                 <input type="hidden" id="oldEmailAddress" name="oldEmailAddress">
                 <div class="mb-4">
                     <label for="editFullName" class="block text-gray-700">{% trans %}general.fullName{% endtrans %}</label>
-                    <input type="text" id="editFullName" name="fullName" class="w-full px-3 py-2 border rounded" required>
+                    <input type="text" id="editFullName" name="fullName" class="w-full px-3 py-2 border rounded-sm" required>
                 </div>
                 <div class="mb-4">
                     <label for="editEmailAddress" class="block text-gray-700">{% trans %}general.emailAddress{% endtrans %}</label>
-                    <input type="email" id="editEmailAddress" name="emailAddress" class="w-full px-3 py-2 border rounded" required>
+                    <input type="email" id="editEmailAddress" name="emailAddress" class="w-full px-3 py-2 border rounded-sm" required>
                 </div>
                 <div class="mb-4">
                     <label for="editRoles" class="block text-gray-700">{% trans %}admin.roles{% endtrans %}</label>
-                    <select id="editRoles" name="roles[]" class="w-full px-3 py-2 border rounded" multiple required>
+                    <select id="editRoles" name="roles[]" class="w-full px-3 py-2 border rounded-sm" multiple required>
                         {% for role in roles %}
                             <option value="{{ role }}">{{ ('security.user_roles.' ~ role) | trans }}</option>
                         {% endfor %}
                     </select>
                 </div>
                 <div class="flex justify-end">
-                    <button type="button" id="cancelEditUserButton" class="bg-gray-500 text-white px-4 py-2 rounded mr-2">{% trans %}general.cancel{% endtrans %}</button>
-                    <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded">{% trans %}general.save_changes{% endtrans %}</button>
+                    <button type="button" id="cancelEditUserButton" class="bg-gray-500 text-white px-4 py-2 rounded-sm mr-2">{% trans %}general.cancel{% endtrans %}</button>
+                    <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded-sm">{% trans %}general.save_changes{% endtrans %}</button>
                 </div>
             </form>
         </div>

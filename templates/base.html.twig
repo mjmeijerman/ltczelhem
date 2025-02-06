@@ -9,7 +9,7 @@
     {{ encore_entry_link_tags('app') }}
 </head>
 <body>
-<div class="flex sticky p-4 top-0 left-0 right-0 shadow w-full bg-gray-50 z-20">
+<div class="flex sticky p-4 top-0 left-0 right-0 shadow-sm w-full bg-gray-50 z-20">
     <a href="{{ path('homepage') }}" class="flex items-center">
         <img src="{{ asset('static_images/logo-ltc-zelhem.png') }}" width="60px"/>
         <span class="text-3xl pl-5">{% trans %}header_welcome{% endtrans %}</span>
@@ -99,7 +99,7 @@
     {% endif %}" role="alert">
             {{ message }}
             <button type="button"
-                    class="ml-2 text-sm font-medium text-blue-700 hover:text-blue-800 focus:outline-none bg-gray-200 rounded-full w-8 h-8 flex items-center justify-center"
+                    class="ml-2 text-sm font-medium text-blue-700 hover:text-blue-800 focus:outline-hidden bg-gray-200 rounded-full w-8 h-8 flex items-center justify-center"
                     data-dismiss="alert" aria-label="Close">×
             </button>
         </div>
