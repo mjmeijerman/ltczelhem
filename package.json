@@ -8,7 +8,7 @@
         "@symfony/webpack-encore": "^5.0.1",
         "@tailwindcss/postcss": "^4.0.0",
         "core-js": "^3.40.0",
-        "postcss": "^8.5.1",
+        "postcss": "^8.5.3",
         "postcss-loader": "^8.1.1",
         "regenerator-runtime": "^0.14.1",
         "tailwindcss": "^4.0.0",
