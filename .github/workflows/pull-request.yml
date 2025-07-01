@@ -14,7 +14,7 @@ jobs:
 
       # Only enable PHP extensions that are enabled on production. Still more than we need probably, but at least dependabot won't install symfony/redis-messenger this way
       - name: Setup PHP with tools # https://github.com/shivammathur/setup-php
-        uses: shivammathur/setup-php@2.33.0
+        uses: shivammathur/setup-php@2.34.1
         with:
           php-version: ${{ matrix.php-versions }}
           tools: composer:v2
@@ -60,7 +60,7 @@ jobs:
 #
 #      # Only enable PHP extensions that are enabled on production. Still more than we need probably, but at least dependabot won't install symfony/redis-messenger this way
 #      - name: Setup PHP with tools # https://github.com/shivammathur/setup-php
-#        uses: shivammathur/setup-php@2.33.0
+#        uses: shivammathur/setup-php@2.34.1
 #        with:
 #          php-version: ${{ matrix.php-versions }}
 #          tools: composer:v2
@@ -109,7 +109,7 @@ jobs:
 #
 #      # Only enable PHP extensions that are enabled on production. Still more than we need probably, but at least dependabot won't install symfony/redis-messenger this way
 #      - name: Setup PHP with tools # https://github.com/shivammathur/setup-php
-#        uses: shivammathur/setup-php@2.33.0
+#        uses: shivammathur/setup-php@2.34.1
 #        with:
 #          php-version: ${{ matrix.php-versions }}
 #          tools: composer:v2
@@ -161,7 +161,7 @@ jobs:
 #
 #      # Only enable PHP extensions that are enabled on production. Still more than we need probably, but at least dependabot won't install symfony/redis-messenger this way
 #      - name: Setup PHP with tools # https://github.com/shivammathur/setup-php
-#        uses: shivammathur/setup-php@2.33.0
+#        uses: shivammathur/setup-php@2.34.1
 #        with:
 #          php-version: ${{ matrix.php-versions }}
 #          tools: composer:v2
@@ -201,7 +201,7 @@ jobs:
 
       # Only enable PHP extensions that are enabled on production. Still more than we need probably, but at least dependabot won't install symfony/redis-messenger this way
       - name: Setup PHP with tools # https://github.com/shivammathur/setup-php
-        uses: shivammathur/setup-php@2.33.0
+        uses: shivammathur/setup-php@2.34.1
         with:
           php-version: ${{ matrix.php-versions }}
           tools: composer:v2
