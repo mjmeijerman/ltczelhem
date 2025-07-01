@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "50382fa7c557f2df650443d549537654",
+    "content-hash": "26ecca853ddaad7d2e2f47d12b2080cd",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -2578,7 +2578,7 @@
         },
         {
             "name": "symfony/clock",
-            "version": "v7.2.0",
+            "version": "v7.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/clock.git",
@@ -2632,7 +2632,7 @@
                 "time"
             ],
             "support": {
-                "source": "https://github.com/symfony/clock/tree/v7.2.0"
+                "source": "https://github.com/symfony/clock/tree/v7.3.0"
             },
             "funding": [
                 {
@@ -4357,16 +4357,16 @@
         },
         {
             "name": "symfony/messenger",
-            "version": "v7.2.5",
+            "version": "v7.3.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/messenger.git",
-                "reference": "3ea7cdba88df1f36dad96289291a32cd9ab1862f"
+                "reference": "716c89b86ce58c4946d436d862694971c999d1aa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/messenger/zipball/3ea7cdba88df1f36dad96289291a32cd9ab1862f",
-                "reference": "3ea7cdba88df1f36dad96289291a32cd9ab1862f",
+                "url": "https://api.github.com/repos/symfony/messenger/zipball/716c89b86ce58c4946d436d862694971c999d1aa",
+                "reference": "716c89b86ce58c4946d436d862694971c999d1aa",
                 "shasum": ""
             },
             "require": {
@@ -4381,6 +4381,7 @@
                 "symfony/event-dispatcher-contracts": "<2.5",
                 "symfony/framework-bundle": "<6.4",
                 "symfony/http-kernel": "<6.4",
+                "symfony/lock": "<6.4",
                 "symfony/serializer": "<6.4"
             },
             "require-dev": {
@@ -4389,6 +4390,7 @@
                 "symfony/dependency-injection": "^6.4|^7.0",
                 "symfony/event-dispatcher": "^6.4|^7.0",
                 "symfony/http-kernel": "^6.4|^7.0",
+                "symfony/lock": "^6.4|^7.0",
                 "symfony/process": "^6.4|^7.0",
                 "symfony/property-access": "^6.4|^7.0",
                 "symfony/rate-limiter": "^6.4|^7.0",
@@ -4424,7 +4426,7 @@
             "description": "Helps applications send and receive messages to/from other applications or via message queues",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/messenger/tree/v7.2.5"
+                "source": "https://github.com/symfony/messenger/tree/v7.3.1"
             },
             "funding": [
                 {
@@ -4440,7 +4442,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-03-04T12:34:02+00:00"
+            "time": "2025-06-27T19:55:54+00:00"
         },
         {
             "name": "symfony/mime",
