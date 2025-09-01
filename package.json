@@ -4,7 +4,7 @@
     },
     "devDependencies": {
         "@babel/core": "^7.28.0",
-        "@babel/preset-env": "^7.28.0",
+        "@babel/preset-env": "^7.28.3",
         "@symfony/webpack-encore": "^5.1.0",
         "@tailwindcss/postcss": "^4.1.11",
         "core-js": "^3.44.0",
