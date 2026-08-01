@@ -11,7 +11,7 @@
         "postcss": "^8.5.16",
         "postcss-loader": "^8.2.1",
         "regenerator-runtime": "^0.14.1",
-        "tailwindcss": "^4.3.2",
+        "tailwindcss": "^4.3.3",
         "webpack": "^5.108.3",
         "webpack-cli": "^5.1.4",
         "webpack-notifier": "^1.15.0"
